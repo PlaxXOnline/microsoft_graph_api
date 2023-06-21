@@ -58,5 +58,11 @@ jobs:
           VERSION=$(yq e '.version' pubspec.yaml)
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git tag $VERSION
-          git push https://${{secrets.GH_TOKEN}}@github.com/PlaxXOnline/microsoft_graph_api.git $VERSION
+          
+          # Check if tag already exists
+          if git rev-parse $VERSION >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists. Skipping..."
+          else
+            git tag $VERSION
+            git push https://${{secrets.GH_TOKEN}}@github.com/PlaxXOnline/microsoft_graph_api.git $VERSION
+          fi
