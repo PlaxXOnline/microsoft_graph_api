@@ -9,4 +9,6 @@ on:
 # Publish using the reusable workflow from dart-lang.
 jobs:
   publish:
+    permissions:
+      id-token: write
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
