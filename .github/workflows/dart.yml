@@ -54,4 +54,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git tag $VERSION
-          git push origin $VERSION
+          git push https://${{secrets.GH_TOKEN}}@github.com/PlaxXOnline/microsoft_graph_api.git $VERSION
