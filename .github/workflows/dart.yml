@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v2.2
@@ -46,6 +48,9 @@ jobs:
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
           sudo apt install yq -y
+
+      - name: List directory contents
+        run: ls -l
 
       - name: Get version and create tag
         run: |
