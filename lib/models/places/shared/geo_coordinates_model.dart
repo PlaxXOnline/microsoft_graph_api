@@ -13,4 +13,11 @@ class GeoCoordinates {
       longitude: json['longitude'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
 }

@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:microsoft_graph_api/models/models.dart';
 
-class Place {
+class Places {
   final String _token;
-  Place(this._token);
+  Places(this._token);
 
   final Dio _dio = Dio();
 
