@@ -144,7 +144,7 @@ class Calendars {
 
       return calendars;
     } catch (e) {
-      print('Failed to fetch calendars: $e');
+      log('Failed to fetch calendars: $e');
       rethrow;
     }
   }
@@ -197,7 +197,7 @@ class Calendars {
 
       return MeetingTimeSuggestionsResult.fromJson(response.data);
     } catch (e) {
-      print('Failed to fetch meeting times: $e');
+      log('Failed to fetch meeting times: $e');
       rethrow;
     }
   }

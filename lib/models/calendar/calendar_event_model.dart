@@ -1,32 +1,32 @@
 import '../models.dart';
 
 class CalendarEvent {
-  final String id;
-  final String createdDateTime;
-  final String lastModifiedDateTime;
-  final bool isReminderOn;
-  final String subject;
-  final String bodyPreview;
-  final bool isAllDay;
-  final bool isOrganizer;
-  final String startDateTime;
-  final String endDateTime;
-  final List<Attendee> attendees;
-  final Organizer organizer;
+  final String? id;
+  final String? createdDateTime;
+  final String? lastModifiedDateTime;
+  final bool? isReminderOn;
+  final String? subject;
+  final String? bodyPreview;
+  final bool? isAllDay;
+  final bool? isOrganizer;
+  final String? startDateTime;
+  final String? endDateTime;
+  final List<Attendee>? attendees;
+  final Organizer? organizer;
 
   CalendarEvent({
-    required this.id,
-    required this.createdDateTime,
-    required this.lastModifiedDateTime,
-    required this.isReminderOn,
-    required this.subject,
-    required this.bodyPreview,
-    required this.isAllDay,
-    required this.isOrganizer,
-    required this.startDateTime,
-    required this.endDateTime,
-    required this.attendees,
-    required this.organizer,
+    this.id,
+    this.createdDateTime,
+    this.lastModifiedDateTime,
+    this.isReminderOn,
+    this.subject,
+    this.bodyPreview,
+    this.isAllDay,
+    this.isOrganizer,
+    this.startDateTime,
+    this.endDateTime,
+    this.attendees,
+    this.organizer,
   });
 
   factory CalendarEvent.fromJson(Map<String, dynamic> json) {
@@ -39,29 +39,33 @@ class CalendarEvent {
       bodyPreview: json['bodyPreview'],
       isAllDay: json['isAllDay'],
       isOrganizer: json['isOrganizer'],
-      startDateTime: json['start']['dateTime'],
-      endDateTime: json['end']['dateTime'],
-      attendees: (json['attendees'] as List)
-          .map((attendee) => Attendee.fromJson(attendee))
-          .toList(),
-      organizer: Organizer.fromJson(json['organizer']),
+      startDateTime: json['start'] != null ? json['start']['dateTime'] : null,
+      endDateTime: json['end'] != null ? json['end']['dateTime'] : null,
+      attendees: json['attendees'] != null
+          ? (json['attendees'] as List)
+              .map((attendee) => Attendee.fromJson(attendee))
+              .toList()
+          : null,
+      organizer: json['organizer'] != null
+          ? Organizer.fromJson(json['organizer'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'createdDateTime': createdDateTime ?? DateTime.now().toIso8601String(),
-      'lastModifiedDateTime': lastModifiedDateTime ?? '',
-      'isReminderOn': isReminderOn ?? true,
-      'subject': subject ?? '',
-      'bodyPreview': bodyPreview ?? '',
-      'isAllDay': isAllDay ?? false,
-      'isOrganizer': isOrganizer ?? true,
-      'start': {'dateTime': startDateTime},
-      'end': {'dateTime': endDateTime},
-      'attendees': attendees.map((attendee) => attendee.toJson()).toList(),
-      'organizer': organizer.toJson(),
+      'createdDateTime': createdDateTime,
+      'lastModifiedDateTime': lastModifiedDateTime,
+      'isReminderOn': isReminderOn,
+      'subject': subject,
+      'bodyPreview': bodyPreview,
+      'isAllDay': isAllDay,
+      'isOrganizer': isOrganizer,
+      'start': startDateTime != null ? {'dateTime': startDateTime} : null,
+      'end': endDateTime != null ? {'dateTime': endDateTime} : null,
+      'attendees': attendees?.map((attendee) => attendee.toJson()).toList(),
+      'organizer': organizer?.toJson(),
     };
   }
 }

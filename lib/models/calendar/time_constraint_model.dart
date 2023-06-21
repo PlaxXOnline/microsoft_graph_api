@@ -10,16 +10,16 @@ class TimeConstraint {
     return TimeConstraint(
       activityDomain: json['activityDomain'],
       timeSlots: (json['timeSlots'] as List)
-          ?.map((e) =>
+          .map((e) =>
               e == null ? null : TimeSlot.fromJson(e as Map<String, dynamic>))
-          ?.toList(),
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'activityDomain': activityDomain,
-      'timeSlots': timeSlots?.map((e) => e?.toJson())?.toList(),
+      'timeSlots': timeSlots?.map((e) => e?.toJson()).toList(),
     };
   }
 }

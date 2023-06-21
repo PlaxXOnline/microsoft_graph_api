@@ -12,9 +12,9 @@ class LocationConstraint {
       isRequired: json['isRequired'],
       suggestLocation: json['suggestLocation'],
       locations: (json['locations'] as List)
-          ?.map((e) =>
+          .map((e) =>
               e == null ? null : Location.fromJson(e as Map<String, dynamic>))
-          ?.toList(),
+          .toList(),
     );
   }
 
@@ -22,7 +22,7 @@ class LocationConstraint {
     return {
       'isRequired': isRequired,
       'suggestLocation': suggestLocation,
-      'locations': locations?.map((e) => e?.toJson())?.toList(),
+      'locations': locations?.map((e) => e?.toJson()).toList(),
     };
   }
 }
