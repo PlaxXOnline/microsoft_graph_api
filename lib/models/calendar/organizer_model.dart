@@ -1,16 +1,19 @@
-class Organizer {
-  final String name;
-  final String address;
+import 'calendar_models.dart';
 
-  Organizer({
-    required this.name,
-    required this.address,
-  });
+class Organizer {
+  final EmailAddress? emailAddress;
+
+  Organizer({this.emailAddress});
 
   factory Organizer.fromJson(Map<String, dynamic> json) {
     return Organizer(
-      name: json['emailAddress']['name'],
-      address: json['emailAddress']['address'],
+      emailAddress: EmailAddress.fromJson(json['emailAddress']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'emailAddress': emailAddress?.toJson(),
+    };
   }
 }

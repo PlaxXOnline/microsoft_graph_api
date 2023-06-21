@@ -1,22 +1,25 @@
-class Attendee {
-  final String response;
-  final String time;
-  final String name;
-  final String address;
+import 'calendar_models.dart';
 
-  Attendee({
-    required this.response,
-    required this.time,
-    required this.name,
-    required this.address,
-  });
+class Attendee {
+  final String? type;
+  final Status? status;
+  final EmailAddress? emailAddress;
+
+  Attendee({this.type, this.status, this.emailAddress});
 
   factory Attendee.fromJson(Map<String, dynamic> json) {
     return Attendee(
-      response: json['status']['response'],
-      time: json['status']['time'],
-      name: json['emailAddress']['name'],
-      address: json['emailAddress']['address'],
+      type: json['type'],
+      status: Status.fromJson(json['status']),
+      emailAddress: EmailAddress.fromJson(json['emailAddress']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'status': status?.toJson(),
+      'emailAddress': emailAddress?.toJson(),
+    };
   }
 }

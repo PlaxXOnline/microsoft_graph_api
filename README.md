@@ -109,11 +109,76 @@ List<CalendarEvent> events = await Calendar.fetchCalendarEventsForRange(startDat
 
 #### Create Calendar Event
 
-The `createCalendarEvent` method is used to create a new calendar event. It requires a Map<String, dynamic>` parameter representing the event to be created. The method sends a POST request to the Microsoft Graph API. If the request is successful, it logs a success message. If the request fails, it logs the error message.
+The `createCalendarEvent` method is used to create a calendar event via the Microsoft Graph API. It performs a POST request to create the calendar event. The request requires an authorization header with the bearer token. This method accepts a range of optional parameters representing various attributes of the event to be created.
+
+The parameters include `id`, `createdDateTime`, `lastModifiedDateTime`, `isReminderOn`, `subject`, `bodyPreview`, `isAllDay`, `isOrganizer`, `startDateTime`, `endDateTime`, a list of `attendees`, and `organizer`.
+
+If a parameter is provided, it's included in the data sent in the request. If `attendees` or `organizer` are provided, they're converted to JSON before being included in the request data.
+
+The function tries to create a calendar event and returns a `Future` that completes with a `CalendarEvent` if the request was successful. If an error occurs during the request, an error message is logged and the error is rethrown.
 
 ```dart
-await Calendar.createCalendarEvent(event);
+await Calendar.createCalendarEvent(
+    id: 'event1',
+    createdDateTime: '2023-06-21T10:00:00.000Z',
+    lastModifiedDateTime: '2023-06-21T10:00:00.000Z',
+    isReminderOn: true,
+    subject: 'Important Meeting',
+    bodyPreview: 'Discussing project status',
+    isAllDay: false,
+    isOrganizer: true,
+    startDateTime: '2023-06-22T10:00:00.000Z',
+    endDateTime: '2023-06-22T12:00:00.000Z',
+    attendees: [Attendee(name: 'John Doe', email: 'johndoe@example.com')],
+    organizer: Organizer(name: 'Jane Doe', email: 'janedoe@example.com')
+);
 ```
+
+#### Fetch Calendars
+
+The `fetchCalendars` method is used to fetch calendar objects from the Microsoft Graph API. It performs a GET request to obtain the calendars. The request requires an authorization header with the bearer token. This method accepts one optional parameter `userId` to specify whose calendars to fetch. If `userId` is not provided, the calendars of the current user will be fetched.
+
+The function attempts to fetch the calendars and returns a `Future` that completes with a list of `Calendar` objects if the request was successful. If an error occurs during the request, it prints an error message and rethrows the error.
+
+
+
+```dart
+List<Calendar> myCalendars = await Calendar.fetchCalendars();
+List<Calendar> usersCalendars = await Calendar.fetchCalendars(userId: 'UserId here');
+```
+
+#### Find Meeting Times
+
+The findMeetingTimes method is used to suggest meeting times based on availability data from the Microsoft Graph API. It performs a POST request to fetch the suggested meeting times. The request requires an authorization header with the bearer token. This method accepts optional parameters including `userId`, `attendees`, `timeSlots`, `locationConstraint`, and `meetingDuration`.
+
+The parameters work as follows:
+
+`userId`: The ID of the user for whom to find meeting times. If not provided, the current user is assumed.
+`attendees`: A list of attendees for the meeting.
+`timeSlots`: A list of available time slots for the meeting.
+`locationConstraint`: The constraints on the location of the meeting.
+`meetingDuration`: The duration of the meeting.
+The function creates a map from the provided parameters, converts it to JSON, and includes it in the body of the POST request. It then attempts to fetch the meeting time suggestions and returns a `Future that completes with a `MeetingTimeSuggestionsResult` object if the request was successful. If an error occurs during the request, it prints an error message and rethrows the error.
+
+
+
+```dart
+MeetingTimeSuggestionsResult otherUsersMeetingTimes = await Calendar.findMeetingTimes(
+    userId: 'user1',
+    attendees: [Attendee(name: 'John Doe', email: 'johndoe@example.com')],
+    timeSlots: [TimeSlot(start: '2023-06-22T09:00:00.000Z', end: '2023-06-22T18:00:00.000Z')],
+    locationConstraint: LocationConstraint(isRequired: false, suggestLocation: false),
+    meetingDuration: 'PT1H' //The length of the meeting, denoted in ISO8601 format. For example, 1 hour is denoted as 'PT1H', where 'P' is the duration designator, 'T' is the time designator, and 'H' is the hour designator. Use M to indicate minutes for the duration; for example, 2 hours and 30 minutes would be 'PT2H30M'. If no meeting duration is specified, findMeetingTimes uses the default of 30 minutes.
+);
+
+MeetingTimeSuggestionsResult myMeetingTimes = await Calendar.findMeetingTimes(
+attendees: [Attendee(name: 'John Doe', email: 'johndoe@example.com')],
+timeSlots: [TimeSlot(start: '2023-06-22T09:00:00.000Z', end: '2023-06-22T18:00:00.000Z')],
+locationConstraint: LocationConstraint(isRequired: false, suggestLocation: false),
+meetingDuration: 'PT1H' //The length of the meeting, denoted in ISO8601 format. For example, 1 hour is denoted as 'PT1H', where 'P' is the duration designator, 'T' is the time designator, and 'H' is the hour designator. Use M to indicate minutes for the duration; for example, 2 hours and 30 minutes would be 'PT2H30M'. If no meeting duration is specified, findMeetingTimes uses the default of 30 minutes.
+);
+```
+
 </details>
 
 <details>

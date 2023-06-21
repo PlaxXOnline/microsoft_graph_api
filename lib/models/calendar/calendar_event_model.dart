@@ -47,4 +47,21 @@ class CalendarEvent {
       organizer: Organizer.fromJson(json['organizer']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'createdDateTime': createdDateTime ?? DateTime.now().toIso8601String(),
+      'lastModifiedDateTime': lastModifiedDateTime ?? '',
+      'isReminderOn': isReminderOn ?? true,
+      'subject': subject ?? '',
+      'bodyPreview': bodyPreview ?? '',
+      'isAllDay': isAllDay ?? false,
+      'isOrganizer': isOrganizer ?? true,
+      'start': {'dateTime': startDateTime},
+      'end': {'dateTime': endDateTime},
+      'attendees': attendees.map((attendee) => attendee.toJson()).toList(),
+      'organizer': organizer.toJson(),
+    };
+  }
 }
