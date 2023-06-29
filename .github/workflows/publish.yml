@@ -6,9 +6,24 @@ on:
     - '[0-9]+.[0-9]+.[0-9]+*' # tag-pattern on pub.dev: ''
 
 
-# Publish using the reusable workflow from dart-lang.
+# Publish using custom workflow
 jobs:
   publish:
     permissions:
-      id-token: write
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+      id-token: write # Required for authentication using OIDC
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v2.2
+        with:
+          version: 3.10.4
+          channel: 'stable' # you can choose the Flutter channel you prefer: stable, beta, dev or master
+      - uses: dart-lang/setup-dart@v1
+      - name: Install dependencies
+        run: flutter pub get
+      # Here you can insert custom steps you need
+      # - run: dart tool/generate-code.dart
+      - name: Publish
+        run: flutter pub publish --force
