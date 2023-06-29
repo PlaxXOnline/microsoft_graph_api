@@ -1,12 +1,28 @@
 import 'calendar_models.dart';
 
+/// Represents a suggested meeting time.
+///
+/// Each instance holds the confidence level of the suggestion, the organizer's availability,
+/// the attendees' availability, the suggested locations, and the suggested time slot.
 class MeetingTimeSuggestion {
-  int? confidence;
-  String? organizerAvailability;
-  List<AttendeeAvailability?>? attendeeAvailability;
-  List<Location?>? locations;
-  TimeSlot? meetingTimeSlot;
+  /// The confidence level of the suggested meeting time.
+  final int? confidence;
 
+  /// The availability of the organizer.
+  final String? organizerAvailability;
+
+  /// A list of the attendees' availability.
+  final List<AttendeeAvailability?>? attendeeAvailability;
+
+  /// A list of suggested locations for the meeting.
+  final List<Location?>? locations;
+
+  /// The suggested time slot for the meeting.
+  final TimeSlot? meetingTimeSlot;
+
+  /// Creates a new instance of [MeetingTimeSuggestion].
+  ///
+  /// All parameters are optional.
   MeetingTimeSuggestion({
     this.confidence,
     this.organizerAvailability,
@@ -15,6 +31,9 @@ class MeetingTimeSuggestion {
     this.meetingTimeSlot,
   });
 
+  /// Creates a new instance of [MeetingTimeSuggestion] from a JSON object.
+  ///
+  /// The JSON object should contain keys that correspond to the parameters of [MeetingTimeSuggestion].
   factory MeetingTimeSuggestion.fromJson(Map<String, dynamic> json) {
     return MeetingTimeSuggestion(
       confidence: json['confidence'],
@@ -35,6 +54,9 @@ class MeetingTimeSuggestion {
     );
   }
 
+  /// Converts this [MeetingTimeSuggestion] object to a JSON object.
+  ///
+  /// Each parameter of [MeetingTimeSuggestion] corresponds to a key in the resulting JSON object.
   Map<String, dynamic> toJson() {
     return {
       'confidence': confidence,

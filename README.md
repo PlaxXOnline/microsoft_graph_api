@@ -57,6 +57,22 @@ The `fetchUserProfileImage` method is used to fetch the user's profile image fro
 ```dart
 ImageProvider image = await graphAPI.me.fetchUserProfileImage(size);
 ```
+
+
+#### Fetch Time Zones
+
+The `fetchTimeZones` method fetches a list of time zones supported by the Microsoft Graph API. This function is asynchronous and returns a list of `TimeZone` objects.
+
+The function sends a GET request to the Microsoft Graph API.
+
+If the request is successful (HTTP status code 200), the function transforms the 'value' field from the response data into a list of `TimeZone` objects, which contains the time zones, and returns this list.
+
+In case of an error (e.g., network error, invalid response data, etc.), the function throws an exception with an appropriate error message.
+
+
+```dart
+List<TimeZone> timeZones = await graphAPI.me.fetchTimeZones();
+```
 </details>
 
 <details>
@@ -94,6 +110,7 @@ The `fetchAllUserRooms` method is used to fetch all user rooms. This method send
 ```dart
 List<Room> rooms = await Users.fetchAllUserRooms();
 ```
+
 </details>
 
 <details>
@@ -179,6 +196,34 @@ meetingDuration: 'PT1H' //The length of the meeting, denoted in ISO8601 format. 
 );
 ```
 
+#### Get Free/Busy Schedule
+
+The `getFreeBusySchedule method fetches the free/busy schedule of specific users from the Microsoft Graph API within a given date-time range.
+
+This function is asynchronous and returns a `ScheduleResponse` object. It takes in four parameters:
+
+1. `startTime`: The start date-time in ISO format to define the range for which to fetch the schedule.
+2. `endTime`: The end date-time in ISO format to define the range for which to fetch the schedule.
+3. `userId` (optional): The ID of the user for whom to fetch the schedule. If not provided, the function fetches the schedule for the currently authenticated user.
+4. `timeZone` (optional): The time zone in which to return the schedule. If not provided, the function uses 'W. Europe Standard Time' as the default time zone.
+
+5. The function sends a POST request to the Microsoft Graph API. The requested URL includes the user ID (if provided), and the request body includes the start and end times, the time zone, and an availability view interval of 60 minutes.
+
+If the request is successful, the function transforms the response data into a `ScheduleResponse` object and returns this object.
+
+In case of an error (e.g., network error, invalid response data, etc.), the function catches the exception, logs an appropriate error message, and rethrows the exception.
+
+
+```dart
+ScheduleResponse schedule = getFreeBusySchedule(
+  '2023-06-21T10:00:00',
+  '2023-06-21T16:00:00',
+  'userID',
+  TimeZone('W. Europe Standard Time'),
+);
+```
+
+
 </details>
 
 <details>
@@ -201,7 +246,7 @@ await MeetingRooms.bookMeetingRoom(event);
 The `fetchAllRooms` method is used to fetch all the rooms from the Microsoft Graph API. It performs a GET request for the rooms. The request requires an authorization header with the bearer token. If the request is successful, it logs the rooms. If there's an error during the request, it logs an error message.
 
 ```dart
-Future<List<Room>> rooms = Place.fetchAllRooms();
+List<Room> rooms = Place.fetchAllRooms();
 ```
 
 #### Fetch All Room Lists
@@ -209,7 +254,7 @@ Future<List<Room>> rooms = Place.fetchAllRooms();
 The `fetchAllRoomLists` method is used to fetch all the room lists from the Microsoft Graph API. It performs a GET request for the room lists. The request requires an authorization header with the bearer token. If the request is successful, it logs the room lists. If there's an error during the request, it logs an error message.
 
 ```dart
-Future<List<Room>> rooms = Place.fetchAllRooms();
+List<Room> rooms = Place.fetchAllRooms();
 ```
 </details>
 

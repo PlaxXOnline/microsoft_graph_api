@@ -1,27 +1,46 @@
 import 'package:microsoft_graph_api/models/models.dart';
 
+/// Represents a list of rooms in the Microsoft Graph API.
+///
+/// This class encapsulates various properties of a room list, such as its id, email address, display name, address, geo-coordinates, and more.
 class RoomList {
-  final String id;
-  final String displayName;
-  final Address address;
+  /// The unique identifier of the room list.
+  final String? id;
+
+  /// The display name of the room list.
+  final String? displayName;
+
+  /// The physical address of the room list.
+  final Address? address;
+
+  /// The email address of the room list.
   final String? emailAddress;
+
+  /// The geographical coordinates of the room list.
   final GeoCoordinates? geocoordinates;
+
+  /// The phone number of the room list.
   final String? phone;
 
+  /// Creates a new instance of [RoomList].
   RoomList({
-    required this.id,
-    required this.displayName,
-    required this.address,
+    this.id,
+    this.displayName,
+    this.address,
     this.emailAddress,
     this.geocoordinates,
     this.phone,
   });
 
+  /// Creates a new instance of [RoomList] from a JSON object.
+  ///
+  /// The JSON object should contain keys that correspond to the properties of [RoomList].
   factory RoomList.fromJson(Map<String, dynamic> json) {
     return RoomList(
       id: json['id'],
       displayName: json['displayName'],
-      address: Address.fromJson(json['address']),
+      address:
+          json['address'] != null ? Address.fromJson(json['address']) : null,
       emailAddress: json['emailAddress'],
       geocoordinates: json['geocoordinates'] != null
           ? GeoCoordinates.fromJson(json['geocoordinates'])
@@ -30,6 +49,7 @@ class RoomList {
     );
   }
 
+  /// Creates a copy of this [RoomList] but with the given fields replaced with the new values.
   RoomList copyWith({
     String? id,
     String? displayName,

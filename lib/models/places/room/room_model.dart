@@ -1,53 +1,98 @@
 import 'package:microsoft_graph_api/models/models.dart';
 
+/// Represents a room in the Microsoft Graph API.
+///
+/// This class encapsulates various properties of a room, such as its id, email address, display name, address, geo-coordinates, and more.
 class Room {
-  final String id;
-  final String emailAddress;
-  final String displayName;
-  final Address address;
-  final GeoCoordinates geoCoordinates;
-  final String phone;
-  final String nickname;
-  final String label;
-  final int capacity;
-  final String building;
-  final int floorNumber;
-  final bool isManaged;
-  final bool isWheelChairAccessible;
-  final String bookingType;
-  final List<String> tags;
-  final String? audioDeviceName;
-  final String? videoDeviceName;
-  final String displayDevice;
+  /// The unique identifier of the room.
+  final String? id;
 
+  /// The email address of the room.
+  final String? emailAddress;
+
+  /// The display name of the room.
+  final String? displayName;
+
+  /// The physical address of the room.
+  final Address? address;
+
+  /// The geographical coordinates of the room.
+  final GeoCoordinates? geoCoordinates;
+
+  /// The phone number of the room.
+  final String? phone;
+
+  /// The nickname of the room.
+  final String? nickname;
+
+  /// The label of the room.
+  final String? label;
+
+  /// The capacity of the room, i.e., the number of people it can accommodate.
+  final int? capacity;
+
+  /// The building where the room is located.
+  final String? building;
+
+  /// The floor number where the room is located.
+  final int? floorNumber;
+
+  /// Indicates if the room is managed.
+  final bool? isManaged;
+
+  /// Indicates if the room is accessible by wheelchair.
+  final bool? isWheelChairAccessible;
+
+  /// The booking type of the room.
+  final String? bookingType;
+
+  /// The tags associated with the room.
+  final List<String>? tags;
+
+  /// The name of the audio device in the room.
+  final String? audioDeviceName;
+
+  /// The name of the video device in the room.
+  final String? videoDeviceName;
+
+  /// The name of the display device in the room.
+  final String? displayDevice;
+
+  /// Creates a new instance of [Room].
   Room({
-    required this.id,
-    required this.emailAddress,
-    required this.displayName,
-    required this.address,
-    required this.geoCoordinates,
-    required this.phone,
-    required this.nickname,
-    required this.label,
-    required this.capacity,
-    required this.building,
-    required this.floorNumber,
-    required this.isManaged,
-    required this.isWheelChairAccessible,
-    required this.bookingType,
-    required this.tags,
+    this.id,
+    this.emailAddress,
+    this.displayName,
+    this.address,
+    this.geoCoordinates,
+    this.phone,
+    this.nickname,
+    this.label,
+    this.capacity,
+    this.building,
+    this.floorNumber,
+    this.isManaged,
+    this.isWheelChairAccessible,
+    this.bookingType,
+    this.tags,
     this.audioDeviceName,
     this.videoDeviceName,
-    required this.displayDevice,
+    this.displayDevice,
   });
 
+  /// Creates a new instance of [Room] from a JSON object.
+  ///
+  /// The JSON object should contain keys that correspond to the properties of [Room].
   factory Room.fromJson(Map<String, dynamic> json) {
     return Room(
       id: json['id'],
       emailAddress: json['emailAddress'],
       displayName: json['displayName'],
-      address: Address.fromJson(json['address']),
-      geoCoordinates: GeoCoordinates.fromJson(json['geoCoordinates']),
+      address:
+          json['address'] != null ? Address.fromJson(json['address']) : null,
+      geoCoordinates: json['geoCoordinates'] != null
+          ? GeoCoordinates.fromJson(json['geoCoordinates'])
+          : null,
       phone: json['phone'],
       nickname: json['nickname'],
       label: json['label'],
@@ -57,13 +102,14 @@ class Room {
       isManaged: json['isManaged'],
       isWheelChairAccessible: json['isWheelChairAccessible'],
       bookingType: json['bookingType'],
-      tags: List<String>.from(json['tags']),
+      tags: json['tags'] != null ? List<String>.from(json['tags']) : null,
       audioDeviceName: json['audioDeviceName'],
       videoDeviceName: json['videoDeviceName'],
       displayDevice: json['displayDevice'],
     );
   }
 
+  /// Creates a copy of this [Room] but with the given fields replaced with the new values.
   Room copyWith({
     String? id,
     String? emailAddress,

@@ -13,3 +13,8 @@ export 'time_slot_model.dart';
 export 'attendee_availability_model.dart';
 export 'meeting_time_suggestion_model.dart';
 export 'meeting_time_suggestions_result_model.dart';
+export 'schedule_information_model.dart';
+export 'schedule_item_model.dart';
+export 'schedule_response_model.dart';
+export 'time_zone_model.dart';
+export 'working_hours_model.dart';

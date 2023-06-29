@@ -1,6 +1,6 @@
 name: microsoft_graph_api
-description: A Flutter package that handles the Microsoft Graph API.
-version: 0.0.2
+description: The microsoft_graph_api package is a robust and streamlined Flutter solution for Microsoft Graph API integration. It empowers developers to interact seamlessly with Microsoft 365 data resources like user information, calendars, mail, and Teams data. The package abstracts the complexities of authentication, API calls, and response handling, while providing customizable authentication flows. Ideal for crafting high-quality Flutter applications that can securely access Microsoft 365 data.
+version: 0.0.3
 repository: https://github.com/PlaxXOnline/microsoft_graph_api
 issue_tracker: https://github.com/PlaxXOnline/microsoft_graph_api/issues
 

@@ -121,4 +121,33 @@ class Me {
       return const AssetImage('assets/user-shadow.png');
     }
   }
+
+  /// Fetches a list of all supported time zones from the Graph API.
+  ///
+  /// This method sends a GET request to the Graph API's supportedTimeZones endpoint
+  /// and parses the response into a list of [TimeZone] objects.
+  ///
+  /// The request is authenticated with a bearer token, which is passed in the
+  /// 'Authorization' header.
+  ///
+  /// Throws an [Exception] if the request fails.
+  ///
+  /// Returns a [Future] that completes with a list of [TimeZone]s.
+  Future<List<TimeZone>> fetchTimeZones() async {
+    final response = await _dio.get(
+      'https://graph.microsoft.com/v1.0/me/outlook/supportedTimeZones',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $_token',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = response.data['value'];
+      return data.map((dynamic item) => TimeZone.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to load time zones');
+    }
+  }
 }

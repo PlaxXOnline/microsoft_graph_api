@@ -201,4 +201,60 @@ class Calendars {
       rethrow;
     }
   }
+
+  /// Fetches the free/busy schedule for a specific user from the Graph API.
+  ///
+  /// This method sends a POST request to the Graph API's getSchedule endpoint
+  /// and parses the response into a [ScheduleResponse] object.
+  ///
+  /// The request is authenticated with a bearer token, which is passed in the
+  /// 'Authorization' header.
+  ///
+  /// The [startTime] and [endTime] parameters specify the time range for which
+  /// the schedule should be retrieved. They should be in ISO 8601 format.
+  ///
+  /// The [userId] parameter is optional. If it is provided, the schedule for
+  /// that user is retrieved. If it is not provided, the schedule for the
+  /// authenticated user is retrieved.
+  ///
+  /// The [timeZone] parameter is optional. If it is provided, its alias is used
+  /// as the time zone for the start and end times. If it is not provided, or if
+  /// it does not have an alias, the alias for the German standard time zone
+  /// ("W. Europe Standard Time") is used.
+  ///
+  /// Throws an [Exception] if the request fails and logs the error.
+  ///
+  /// Returns a [Future] that completes with a [ScheduleResponse].
+  Future<ScheduleResponse> getFreeBusySchedule(String startTime, String endTime,
+      String? userId, TimeZone? timeZone) async {
+    final String urlUserId = userId != null ? "/users/$userId" : "/me";
+    final String timeZoneAlias = timeZone?.alias ?? 'W. Europe Standard Time';
+
+    final Map<String, dynamic> body = {
+      "schedules": [
+        "adelev@contoso.onmicrosoft.com",
+        "meganb@contoso.onmicrosoft.com"
+      ],
+      "startTime": {"dateTime": startTime, "timeZone": timeZoneAlias},
+      "endTime": {"dateTime": endTime, "timeZone": timeZoneAlias},
+      "availabilityViewInterval": 60
+    };
+
+    try {
+      final response = await _dio.post(
+        'https://graph.microsoft.com/v1.0$urlUserId/calendar/getSchedule',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $_token',
+          },
+        ),
+        data: jsonEncode(body),
+      );
+
+      return ScheduleResponse.fromJson(response.data);
+    } catch (e) {
+      log('Failed to fetch meeting times: $e');
+      rethrow;
+    }
+  }
 }

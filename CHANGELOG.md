@@ -1,3 +1,9 @@
+## 0.0.3
+
+* added getFreeBusySchedule Method for own Schedules and also for other users Schedules
+* added fetchTimeZones Method for own supported Timezones
+* added DartDoc Comments for all Models
+
 ## 0.0.2
 
 * added example file
