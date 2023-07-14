@@ -1,3 +1,7 @@
+## 0.0.4
+
+* changed DartDocs for particular Methods
+
 ## 0.0.3
 
 * added getFreeBusySchedule Method for own Schedules and also for other users Schedules
