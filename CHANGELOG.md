@@ -1,7 +1,11 @@
+## 0.0.6
+
+* added Endpoints to Create Notebooks
+* updated Readme
+
 ## 0.0.5
 
 * added Notes Endpoints and Models
-
 
 ## 0.0.4
 

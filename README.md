@@ -84,6 +84,15 @@ The fetchOneNoteNotebooks` method is designed to retrieve all OneNote notebooks 
 List<Map<String, dynamic>> notebooks = await fetchOneNoteNotebooks();
 ```
 
+
+#### Create OneNote Notebook
+
+The `createOneNoteNotebook` method is tailored to establish a new OneNote notebook for the authenticated user via the Microsoft Graph API. It conducts a POST request to generate the notebook, specifying its name. An authorization header, accompanied by the bearer token, is pivotal for this request. If the request culminates successfully, the method yields the created notebook, encapsulating its attributes in a map. Conversely, if any complications arise during the request, an error message is duly logged.
+
+```dart
+Map<String, dynamic> newNotebook = await createOneNoteNotebook("My New Notebook");
+```
+
 </details>
 
 <details>
@@ -120,6 +129,15 @@ The `fetchOneNoteNotebooksForUser` method aims to obtain OneNote notebooks assoc
 ```dart
 List<Map<String, dynamic>> userNotebooks = await fetchOneNoteNotebooksForUser(userIdOrPrincipal);
 ```
+
+#### Create OneNote Notebook for a Specific User
+
+The `createOneNoteNotebookForUser` method is devised to fabricate a new OneNote notebook for a distinct user, discerned by their ID or userPrincipalName, through the Microsoft Graph API. This method initiates a POST request to engender the notebook for the designated user, denoting its name. The request is contingent on an authorization header with the bearer token. Upon a successful request, the method proffers the freshly created notebook, representing its properties in a map. Should there be any disruptions during the request, an error message is chronicled.
+
+```dart
+Map<String, dynamic> userSpecificNotebook = await createOneNoteNotebookForUser(userIdOrPrincipal, "User's Private Notebook");
+```
+
 
 #### Fetch All User Rooms (Beta)
 
@@ -280,19 +298,39 @@ List<Room> rooms = Place.fetchAllRooms();
 <details>
   <summary>Notes</summary>
 
-#### Fetch All Rooms
+#### You can find this Information split in Me and Users.
 
-The `fetchAllRooms` method is used to fetch all the rooms from the Microsoft Graph API. It performs a GET request for the rooms. The request requires an authorization header with the bearer token. If the request is successful, it logs the rooms. If there's an error during the request, it logs an error message.
+#### Fetch OneNote Notebooks
 
-```dart
-List<Room> rooms = Place.fetchAllRooms();
-```
-
-#### Fetch All Room Lists
-
-The `fetchAllRoomLists` method is used to fetch all the room lists from the Microsoft Graph API. It performs a GET request for the room lists. The request requires an authorization header with the bearer token. If the request is successful, it logs the room lists. If there's an error during the request, it logs an error message.
+The fetchOneNoteNotebooks` method is designed to retrieve all OneNote notebooks associated with the authenticated user from the Microsoft Graph API. It carries out a GET request for these notebooks. An authorization header with the bearer token is essential for this request. If the request concludes successfully, it returns a list of notebooks. In the event of an error during the request, an error message is logged.
 
 ```dart
-List<Room> rooms = Place.fetchAllRooms();
+List<Map<String, dynamic>> notebooks = await fetchOneNoteNotebooks();
 ```
+
+
+#### Create OneNote Notebook
+
+The `createOneNoteNotebook` method is tailored to establish a new OneNote notebook for the authenticated user via the Microsoft Graph API. It conducts a POST request to generate the notebook, specifying its name. An authorization header, accompanied by the bearer token, is pivotal for this request. If the request culminates successfully, the method yields the created notebook, encapsulating its attributes in a map. Conversely, if any complications arise during the request, an error message is duly logged.
+
+```dart
+Map<String, dynamic> newNotebook = await createOneNoteNotebook("My New Notebook");
+```
+
+#### Fetch OneNote Notebooks for a Specific User
+
+The `fetchOneNoteNotebooksForUser` method aims to obtain OneNote notebooks associated with a specific user, identified by their ID or userPrincipalName, from the Microsoft Graph API. This method executes a GET request for the notebooks of the specified user. The request mandates an authorization header with the bearer token. When the request is successful, it yields a list of notebooks for that user. If any error arises during the request, an error message is logged.
+
+```dart
+List<Map<String, dynamic>> userNotebooks = await fetchOneNoteNotebooksForUser(userIdOrPrincipal);
+```
+
+#### Create OneNote Notebook for a Specific User
+
+The `createOneNoteNotebookForUser` method is devised to fabricate a new OneNote notebook for a distinct user, discerned by their ID or userPrincipalName, through the Microsoft Graph API. This method initiates a POST request to engender the notebook for the designated user, denoting its name. The request is contingent on an authorization header with the bearer token. Upon a successful request, the method proffers the freshly created notebook, representing its properties in a map. Should there be any disruptions during the request, an error message is chronicled.
+
+```dart
+Map<String, dynamic> userSpecificNotebook = await createOneNoteNotebookForUser(userIdOrPrincipal, "User's Private Notebook");
+```
+
 </details>

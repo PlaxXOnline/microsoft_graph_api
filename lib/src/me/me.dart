@@ -184,4 +184,40 @@ class Me {
       return [];
     }
   }
+
+  /// Creates a new OneNote notebook using the Microsoft Graph API.
+  ///
+  /// This function is asynchronous and returns the created notebook (`Map<String, dynamic>`). It takes two parameters:
+  /// [_token]: the access token used to authenticate the request.
+  /// [displayName]: the name of the new notebook to be created. -> Notebook names must be unique. The name cannot contain more than 128 characters or contain the following characters: ?*/:<>|'"
+  ///
+  /// The function sends a POST request to the Microsoft Graph API to create a new OneNote notebook with the specified name.
+  ///
+  /// If the request is successful, the function returns the created notebook. This map represents the notebook and its properties.
+  ///
+  /// In case of an error (e.g., network error, invalid request data, etc.), the function catches the exception and logs an appropriate error message.
+  Future<Map<String, dynamic>> createOneNoteNotebook(String displayName) async {
+    try {
+      final response = await _dio.post(
+        'https://graph.microsoft.com/v1.0/me/onenote/notebooks',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $_token',
+            'Content-Type': 'application/json'
+          },
+        ),
+        data: {'displayName': displayName},
+      );
+
+      if (response.statusCode == 201 && response.data != null) {
+        return Map<String, dynamic>.from(response.data);
+      } else {
+        log('Failed to create OneNote notebook: ${response.statusMessage}');
+        return {};
+      }
+    } catch (e) {
+      log('Error creating OneNote notebook: $e');
+      return {};
+    }
+  }
 }
