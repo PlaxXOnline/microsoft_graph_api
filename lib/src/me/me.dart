@@ -150,4 +150,38 @@ class Me {
       throw Exception('Failed to load time zones');
     }
   }
+
+  /// Retrieves OneNote notebooks associated with the authenticated user using the Microsoft Graph API.
+  ///
+  /// This function is asynchronous and returns a list of notebooks [List<Map<String, dynamic>>]. It takes one parameter:
+  /// 1. [_token]: the access token used to authenticate the request.
+  ///
+  /// The function sends a GET request to the Microsoft Graph API to fetch the OneNote notebooks.
+  ///
+  /// If the request is successful, the function returns the list of notebooks. This list contains maps, where each map represents a notebook and its properties.
+  ///
+  /// In case of an error (e.g., network error, invalid request data, etc.), the function catches the exception and logs an appropriate error message.
+  Future<List<Map<String, dynamic>>> fetchOneNoteNotebooks() async {
+    try {
+      final response = await _dio.get(
+        'https://graph.microsoft.com/v1.0/me/onenote/notebooks',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $_token',
+            'Content-Type': 'application/json'
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        return List<Map<String, dynamic>>.from(response.data['value']);
+      } else {
+        log('Failed to fetch OneNote notebooks: ${response.statusMessage}');
+        return [];
+      }
+    } catch (e) {
+      log('Error fetching OneNote notebooks: $e');
+      return [];
+    }
+  }
 }

@@ -12,6 +12,9 @@ class Example {
         await graphAPI.me.changePassword('BadPassword', 'AlsoBadPassword');
     ImageProvider image = await graphAPI.me
         .fetchUserProfileImage(PhotoSize().getPicSize(PhotoSizeEnum.size48x48));
+
+    List<Map<String, dynamic>> meNotebooks =
+        await graphAPI.me.fetchOneNoteNotebooks();
   }
 
   _users() async {
@@ -19,6 +22,9 @@ class Example {
     User newUser = await graphAPI.users.createUser(
         'displayName', 'mailNickname', 'userPrincipalName', 'password');
     bool isDeleted = await graphAPI.users.deleteUser('UserIDHere');
+
+    List<Map<String, dynamic>> usersNotebooks =
+        await graphAPI.users.fetchOneNoteNotebooksForUser('userIdOrPrincipal');
 
     // BETA
     List<Room> userRooms = await graphAPI.users.fetchAllUserRooms();

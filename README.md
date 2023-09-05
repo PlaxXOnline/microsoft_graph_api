@@ -10,9 +10,10 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `calendar`: An instance of the `Calendar` class for calendar-related operations.
 - `meetingRooms`: An instance of the `MeetingRooms` class for operations related to meeting rooms.
 - `place`: An instance of the `Place` class for place-related operations.
+- `notes`: An instance of the `Notes` class for notes-related operations.
 
 ## Constructor
-The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, and `Place` classes.
+The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place` and `Notes` classes.
 
 ## Usage
 
@@ -73,6 +74,16 @@ In case of an error (e.g., network error, invalid response data, etc.), the func
 ```dart
 List<TimeZone> timeZones = await graphAPI.me.fetchTimeZones();
 ```
+
+
+#### Fetch OneNote Notebooks
+
+The fetchOneNoteNotebooks` method is designed to retrieve all OneNote notebooks associated with the authenticated user from the Microsoft Graph API. It carries out a GET request for these notebooks. An authorization header with the bearer token is essential for this request. If the request concludes successfully, it returns a list of notebooks. In the event of an error during the request, an error message is logged.
+
+```dart
+List<Map<String, dynamic>> notebooks = await fetchOneNoteNotebooks();
+```
+
 </details>
 
 <details>
@@ -100,6 +111,14 @@ The `deleteUser` method is used to delete a user. It requires the `userId` param
 
 ```dart
 bool success = await Users.deleteUser(userId);
+```
+
+#### Fetch OneNote Notebooks for a Specific User
+
+The `fetchOneNoteNotebooksForUser` method aims to obtain OneNote notebooks associated with a specific user, identified by their ID or userPrincipalName, from the Microsoft Graph API. This method executes a GET request for the notebooks of the specified user. The request mandates an authorization header with the bearer token. When the request is successful, it yields a list of notebooks for that user. If any error arises during the request, an error message is logged.
+
+```dart
+List<Map<String, dynamic>> userNotebooks = await fetchOneNoteNotebooksForUser(userIdOrPrincipal);
 ```
 
 #### Fetch All User Rooms (Beta)
@@ -258,3 +277,22 @@ List<Room> rooms = Place.fetchAllRooms();
 ```
 </details>
 
+<details>
+  <summary>Notes</summary>
+
+#### Fetch All Rooms
+
+The `fetchAllRooms` method is used to fetch all the rooms from the Microsoft Graph API. It performs a GET request for the rooms. The request requires an authorization header with the bearer token. If the request is successful, it logs the rooms. If there's an error during the request, it logs an error message.
+
+```dart
+List<Room> rooms = Place.fetchAllRooms();
+```
+
+#### Fetch All Room Lists
+
+The `fetchAllRoomLists` method is used to fetch all the room lists from the Microsoft Graph API. It performs a GET request for the room lists. The request requires an authorization header with the bearer token. If the request is successful, it logs the room lists. If there's an error during the request, it logs an error message.
+
+```dart
+List<Room> rooms = Place.fetchAllRooms();
+```
+</details>

@@ -1,3 +1,8 @@
+## 0.0.5
+
+* added Notes Endpoints and Models
+
+
 ## 0.0.4
 
 * changed DartDocs for particular Methods
