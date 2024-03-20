@@ -25,7 +25,7 @@ class Contacts {
       'graph.microsoft.com',
       folderId == null
           ? '/v1.0/me/contacts'
-          : '/v1.0/me/contactfolder/$folderId/contacts',
+          : '/v1.0/me/contactFolders/$folderId/contacts',
       query,
     );
 
@@ -49,7 +49,6 @@ class Contacts {
     } catch (e) {
       log('Failed to fetch contacts: $e');
 
-      
       rethrow;
     }
   }
@@ -74,7 +73,7 @@ class Contacts {
 
       return contactsFolders;
     } catch (e) {
-      log('Failed to fetch contacts: $e');
+      log('Failed to fetch contact folders: $e');
       rethrow;
     }
   }
