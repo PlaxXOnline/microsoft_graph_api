@@ -1,3 +1,8 @@
+## 0.0.7
+
+* added Permissions Table in Method Dart Doc
+* updated Readme
+
 ## 0.0.6
 
 * added Endpoints to Create Notebooks

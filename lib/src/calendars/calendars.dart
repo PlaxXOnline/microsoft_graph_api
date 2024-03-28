@@ -28,6 +28,12 @@ class Calendars {
   /// In case of an error (e.g., network error, invalid response data, etc.), the function catches the exception, logs an appropriate error message, and rethrows the exception.
   ///
   /// Returns a `Future` that completes with a list of `CalendarEvent` objects if the request was successful, or throws an exception if the request failed.
+  ///
+  /// | Permission type                             | Permissions                                          |
+  /// |--------------------------------------------|------------------------------------------------------|
+  /// | Delegated (work or school account)         | Calendars.ReadBasic, Calendars.Read, Calendars.ReadWrite |
+  /// | Delegated (personal Microsoft account)     | Not supported.                                       |
+  /// | Application                                | Calendars.ReadBasic, Calendars.Read, Calendars.ReadWrite |
   Future<List<CalendarEvent>> fetchCalendarEventsForRange(
       DateTime startDateTime, DateTime endDateTime) async {
     try {
@@ -62,6 +68,12 @@ class Calendars {
   /// If the request is successful, the function logs a success message and returns the created event as a `CalendarEvent`.
   ///
   /// In case of an error (e.g., network error, invalid request data, etc.), the function catches the exception, logs an appropriate error message, and rethrow the exception.
+  ///
+  /// | Permission type                             | Permissions           |
+  /// |--------------------------------------------|-----------------------|
+  /// | Delegated (work or school account)         | Calendars.ReadWrite   |
+  /// | Delegated (personal Microsoft account)     | Calendars.ReadWrite   |
+  /// | Application                                | Calendars.ReadWrite   |
   Future<CalendarEvent> createCalendarEvent({
     String? id,
     String? createdDateTime,
@@ -125,6 +137,12 @@ class Calendars {
   /// In case of an error (e.g., network error, invalid response data, etc.), the function catches the exception, prints an appropriate error message, and rethrows the exception.
   ///
   /// Returns a `Future` that completes with a list of `Calendar` objects if the request was successful, or throws an exception if the request failed.
+  ///
+  /// | Permission type                             | Permissions                                                                |
+  /// |--------------------------------------------|----------------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | Calendars.ReadBasic, Calendars.Read, Calendars.Read.Shared, Calendars.ReadWrite |
+  /// | Delegated (personal Microsoft account)     | Calendars.ReadBasic, Calendars.Read, Calendars.Read.Shared, Calendars.ReadWrite |
+  /// | Application                                | Calendars.ReadBasic, Calendars.Read, Calendars.ReadWrite                   |
   Future<List<Calendar>> fetchCalendars({String? userId}) async {
     try {
       final String urlUserId = userId != null ? "/users/$userId" : "/me";
@@ -163,6 +181,12 @@ class Calendars {
   /// If the request is successful, the function returns a [MeetingTimeSuggestionsResult] object created from the response data.
   ///
   /// If an error occurs during the request (e.g., network error, invalid request data, etc.), the function prints an error message and rethrows the exception.
+  ///
+  /// | Permission type                             | Permissions                      |
+  /// |--------------------------------------------|----------------------------------|
+  /// | Delegated (work or school account)         | Calendars.Read, Calendars.ReadWrite |
+  /// | Delegated (personal Microsoft account)     | Not supported.                   |
+  /// | Application                                | Not supported.                   |
   Future<MeetingTimeSuggestionsResult> findMeetingTimes({
     String? userId,
     List<Attendee>? attendees,
@@ -225,6 +249,12 @@ class Calendars {
   /// Throws an [Exception] if the request fails and logs the error.
   ///
   /// Returns a [Future] that completes with a [ScheduleResponse].
+  ///
+  /// | Permission type                             | Permissions                                          |
+  /// |--------------------------------------------|------------------------------------------------------|
+  /// | Delegated (work or school account)         | Calendars.ReadBasic, Calendars.Read, Calendars.ReadWrite |
+  /// | Delegated (personal Microsoft account)     | Not supported.                                       |
+  /// | Application                                | Calendars.ReadBasic, Calendars.Read, Calendars.ReadWrite |
   Future<ScheduleResponse> getFreeBusySchedule(String startTime, String endTime,
       String? userId, TimeZone? timeZone) async {
     final String urlUserId = userId != null ? "/users/$userId" : "/me";

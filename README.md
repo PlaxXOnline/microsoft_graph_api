@@ -268,10 +268,10 @@ ScheduleResponse schedule = getFreeBusySchedule(
 
 #### Book Meeting Room
 
-The `bookMeetingRoom` method is used to book a meeting room by creating a new event. It requires a `Map<String, dynamic>` parameter representing the event to be created. This event should represent the booking of the meeting room. The method sends a POST request to the Microsoft Graph API. If the request is successful, it logs a success message. If the request fails, it logs the error message.
+The `bookMeetingRoom` method is used to book a meeting room by creating a new event. It requires a `CalendarEvent` parameter representing the event to be created. This event should represent the booking of the meeting room. The method sends a POST request to the Microsoft Graph API. If the request is successful, it logs a success message. If the request fails, it logs the error message.
 
 ```dart
-await MeetingRooms.bookMeetingRoom(event);
+await MeetingRooms.bookMeetingRoom(CalendarEvent event);
 ```
 </details>
 

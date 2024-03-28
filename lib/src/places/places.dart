@@ -20,6 +20,12 @@ class Places {
   /// If there's an error during the request, the method logs an error message.
   ///
   /// Returns a Future that completes with a List of Room objects.
+  ///
+  /// | Permission type                             | Permissions     |
+  /// |--------------------------------------------|-----------------|
+  /// | Delegated (work or school account)         | Place.Read.All  |
+  /// | Delegated (personal Microsoft account)     | Not supported   |
+  /// | Application                                | Place.Read.All  |
   Future<List<Room>> fetchAllRooms() async {
     try {
       final response = await _dio.get(
@@ -55,6 +61,12 @@ class Places {
   /// If there's an error during the request, the method logs an error message.
   ///
   /// Returns a Future that completes with a List of RoomList objects.
+  ///
+  /// | Permission type                             | Permissions     |
+  /// |--------------------------------------------|-----------------|
+  /// | Delegated (work or school account)         | Place.Read.All  |
+  /// | Delegated (personal Microsoft account)     | Not supported   |
+  /// | Application                                | Place.Read.All  |
   Future<List<RoomList>> fetchAllRoomLists() async {
     try {
       final response = await _dio.get(
