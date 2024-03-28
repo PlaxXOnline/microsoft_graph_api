@@ -78,4 +78,9 @@ class Example {
     List<Room> rooms = await graphAPI.places.fetchAllRooms();
     List<RoomList> roomLists = await graphAPI.places.fetchAllRoomLists();
   }
+
+  _contact() async {
+    List<Contact> contacts = await graphAPI.contacts.fetchContacts();
+    List<ContactFolder> contactFolders = await graphAPI.contacts.fetchContactFolders();
+  }
 }

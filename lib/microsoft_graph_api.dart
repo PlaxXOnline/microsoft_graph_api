@@ -5,6 +5,7 @@ import 'package:microsoft_graph_api/src/me/me.dart';
 import 'package:microsoft_graph_api/src/meetingrooms/meetingrooms.dart';
 import 'package:microsoft_graph_api/src/places/places.dart';
 import 'package:microsoft_graph_api/src/users/users.dart';
+import 'package:microsoft_graph_api/src/contacts/contacts.dart';
 
 /// Class for interacting with the Microsoft Graph API.
 /// This class serves as the central access point to the various
@@ -28,6 +29,9 @@ class MSGraphAPI {
   /// Provides access to operations on places.
   late Places places;
 
+  /// Provides access to operations on contacts.
+  late Contacts contacts;
+
   /// Creates a new instance of the MSGraphAPI class.
   /// Accepts an authentication token and initializes access to the various
   /// areas of the Microsoft Graph API.
@@ -37,5 +41,6 @@ class MSGraphAPI {
     calendars = Calendars(_token);
     meetingRooms = MeetingRooms(_token);
     places = Places(_token);
+    contacts = Contacts(_token);
   }
 }

@@ -21,6 +21,12 @@ class Me {
   /// In case of an error (e.g., network error, invalid response data, etc.), the function catches the exception, logs out an appropriate error message, and returns an empty `User` object.
   ///
   /// Note that `$token` in `Bearer $token` is a variable that contains the access token needed for authenticating the request. This token must be set prior to the execution of the function.
+  ///
+  /// | Permission type                             | Permissions (from least to most privileged)                               |
+  /// |--------------------------------------------|----------------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | User.Read, User.ReadWrite, User.ReadBasic.All, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All |
+  /// | Delegated (personal Microsoft account)     | User.Read, User.ReadWrite                                                  |
+  /// | Application                                | User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All |
   Future<User> fetchUserInfo() async {
     try {
       final response = await _dio.get(
@@ -49,6 +55,11 @@ class Me {
   /// If the request is successful, it returns `true`.
   ///
   /// If the request fails, it logs the error message and returns `false`.
+  /// | Permission type                             | Permissions (from least to most privileged) |
+  /// |--------------------------------------------|----------------------------------------------|
+  /// | Delegated (work or school account)         | Directory.AccessAsUser.All                  |
+  /// | Delegated (personal Microsoft account)     | Not supported.                              |
+  /// | Application                                | Not supported.
   Future<bool> changePassword(
       String currentPassword, String newPassword) async {
     try {
@@ -96,6 +107,12 @@ class Me {
   ///
   /// Throws:
   ///   Exception if the server does not return a 200 OK response.
+  ///
+  /// | Permission type                             | Least Privileged            | Most Privileged                                                       |
+  /// |--------------------------------------------|-----------------------------|-----------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | User.Read                   | User.ReadBasic.All, User.Read.All, User.ReadWrite, User.ReadWrite.All |
+  /// | Delegated (personal Microsoft account)     | User.Read                   | User.ReadWrite                                                        |
+  /// | Application                                | User.Read.All               | User.ReadWrite.All                                                    |
   Future<ImageProvider> fetchUserProfileImage(String size) async {
     try {
       final response = await _dio.get(
@@ -133,6 +150,12 @@ class Me {
   /// Throws an [Exception] if the request fails.
   ///
   /// Returns a [Future] that completes with a list of [TimeZone]s.
+  ///
+  /// | Permission type                             | Permissions                                   |
+  /// |--------------------------------------------|-----------------------------------------------|
+  /// | Delegated (work or school account)         | User.Read, User.ReadBasic.All                 |
+  /// | Delegated (personal Microsoft account)     | User.Read                                     |
+  /// | Application                                | User.Read.All                                 |
   Future<List<TimeZone>> fetchTimeZones() async {
     final response = await _dio.get(
       'https://graph.microsoft.com/v1.0/me/outlook/supportedTimeZones',
@@ -161,6 +184,12 @@ class Me {
   /// If the request is successful, the function returns the list of notebooks. This list contains maps, where each map represents a notebook and its properties.
   ///
   /// In case of an error (e.g., network error, invalid request data, etc.), the function catches the exception and logs an appropriate error message.
+  ///
+  /// | Permission type                             | Permissions                                                             |
+  /// |--------------------------------------------|-------------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | Notes.Create, Notes.Read, Notes.ReadWrite, Notes.Read.All, Notes.ReadWrite.All |
+  /// | Delegated (personal Microsoft account)     | Notes.Create, Notes.Read, Notes.ReadWrite                               |
+  /// | Application                                | Notes.Read.All, Notes.ReadWrite.All                                     |
   Future<List<Map<String, dynamic>>> fetchOneNoteNotebooks() async {
     try {
       final response = await _dio.get(
@@ -196,6 +225,12 @@ class Me {
   /// If the request is successful, the function returns the created notebook. This map represents the notebook and its properties.
   ///
   /// In case of an error (e.g., network error, invalid request data, etc.), the function catches the exception and logs an appropriate error message.
+  ///
+  /// | Permission type                             | Permissions                                                       |
+  /// |--------------------------------------------|-------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | Notes.Create, Notes.ReadWrite, Notes.ReadWrite.All                |
+  /// | Delegated (personal Microsoft account)     | Notes.Create, Notes.ReadWrite                                     |
+  /// | Application                                | Notes.ReadWrite.All                                               |
   Future<Map<String, dynamic>> createOneNoteNotebook(String displayName) async {
     try {
       final response = await _dio.post(

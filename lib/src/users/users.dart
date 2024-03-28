@@ -20,6 +20,10 @@ class Users {
   /// Note that `$token` in `Bearer $token` is a variable that contains the access token needed for authenticating the request. This token must be set prior to the execution of the function.
   ///
   /// The `userId` parameter is a string representing the unique identifier of the user to fetch information for.
+  /// |--------------------------------------------|----------------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | User.Read, User.ReadWrite, User.ReadBasic.All, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All |
+  /// | Delegated (personal Microsoft account)     | User.Read, User.ReadWrite                                                  |
+  /// | Application                                | User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All |
   Future<User> fetchSpecificUserInfo(String userId) async {
     try {
       final response = await _dio.get(
@@ -50,6 +54,12 @@ class Users {
   /// If the request is successful, it returns a `User` object created from the API response.
   ///
   /// If the request fails, it logs the error message and returns an empty `User` object.
+  ///
+  /// | Permission type                             | Permissions                               |
+  /// |--------------------------------------------|-------------------------------------------|
+  /// | Delegated (work or school account)         | User.ReadWrite.All, Directory.ReadWrite.All|
+  /// | Delegated (personal Microsoft account)     | Not supported.                            |
+  /// | Application                                | User.ReadWrite.All, Directory.ReadWrite.All|
   Future<User> createUser(String displayName, String mailNickname,
       String userPrincipalName, String password) async {
     try {
@@ -91,6 +101,17 @@ class Users {
   /// If the request is successful, it returns `true`.
   ///
   /// If the request fails, it logs the error message and returns `false`.
+  ///
+  /// | Permission type                             | Permissions               |
+  /// |--------------------------------------------|---------------------------|
+  /// | Delegated (work or school account)         | User.ReadWrite.All        |
+  /// | Delegated (personal Microsoft account)     | Not supported.            |
+  /// | Application                                | User.ReadWrite.All        |
+  ///
+  /// The calling user must be assigned one of the following Azure AD roles:
+  /// - `User Administrator`
+  /// - `Privileged Authentication Administrator`
+  /// - `Global Administrator`
   Future<bool> deleteUser(String userId) async {
     try {
       await _dio.delete(
@@ -158,6 +179,12 @@ class Users {
   /// If the request is successful, the function returns the list of notebooks. This list contains maps, where each map represents a notebook and its properties.
   ///
   /// In case of an error (e.g., network error, invalid request data, etc.), the function catches the exception and logs an appropriate error message.
+  ///
+  /// | Permission type                             | Permissions                                                             |
+  /// |--------------------------------------------|-------------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | Notes.Create, Notes.Read, Notes.ReadWrite, Notes.Read.All, Notes.ReadWrite.All |
+  /// | Delegated (personal Microsoft account)     | Notes.Create, Notes.Read, Notes.ReadWrite                               |
+  /// | Application                                | Notes.Read.All, Notes.ReadWrite.All                                     |
   Future<List<Map<String, dynamic>>> fetchOneNoteNotebooksForUser(
       String userIdOrPrincipal) async {
     try {
@@ -195,6 +222,12 @@ class Users {
   /// If the request is successful, the function returns the created notebook. This map represents the notebook and its properties.
   ///
   /// In case of an error (e.g., network error, invalid request data, etc.), the function catches the exception and logs an appropriate error message.
+  ///
+  /// | Permission type                             | Permissions                                                       |
+  /// |--------------------------------------------|-------------------------------------------------------------------|
+  /// | Delegated (work or school account)         | Notes.Create, Notes.ReadWrite, Notes.ReadWrite.All                |
+  /// | Delegated (personal Microsoft account)     | Notes.Create, Notes.ReadWrite                                     |
+  /// | Application                                | Notes.ReadWrite.All                                               |
   Future<Map<String, dynamic>> createOneNoteNotebookForUser(
       String userIdOrPrincipal, String displayName) async {
     try {

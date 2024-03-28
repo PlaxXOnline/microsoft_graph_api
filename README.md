@@ -11,6 +11,7 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `meetingRooms`: An instance of the `MeetingRooms` class for operations related to meeting rooms.
 - `place`: An instance of the `Place` class for place-related operations.
 - `notes`: An instance of the `Notes` class for notes-related operations.
+- `contacts`: An instance of the `Contacts` class for contacts-related operations.
 
 ## Constructor
 The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place` and `Notes` classes.
@@ -268,10 +269,10 @@ ScheduleResponse schedule = getFreeBusySchedule(
 
 #### Book Meeting Room
 
-The `bookMeetingRoom` method is used to book a meeting room by creating a new event. It requires a `Map<String, dynamic>` parameter representing the event to be created. This event should represent the booking of the meeting room. The method sends a POST request to the Microsoft Graph API. If the request is successful, it logs a success message. If the request fails, it logs the error message.
+The `bookMeetingRoom` method is used to book a meeting room by creating a new event. It requires a `CalendarEvent` parameter representing the event to be created. This event should represent the booking of the meeting room. The method sends a POST request to the Microsoft Graph API. If the request is successful, it logs a success message. If the request fails, it logs the error message.
 
 ```dart
-await MeetingRooms.bookMeetingRoom(event);
+await MeetingRooms.bookMeetingRoom(CalendarEvent event);
 ```
 </details>
 
@@ -334,3 +335,40 @@ Map<String, dynamic> userSpecificNotebook = await createOneNoteNotebookForUser(u
 ```
 
 </details>
+<details>
+  <summary>Contacts</summary>
+
+#### List Contacts
+
+The `listContacts` method is used to fetch contacts from the Microsoft Graph API. It performs a GET request for the contacts. The request requires an authorization header with the bearer token. If the request is successful, it logs the contacts. If there's an error during the request, it logs an error message.
+
+It takes an optional folderId parameter, which specifies the ID of the folder from which to fetch the contacts. If not provided, the contacts are fetched from the default contacts folder.
+
+It also takes an optional query parameter, which specifies the query string to filter the contacts. If not provided, all contacts are fetched.
+
+```dart
+List<Contact> contacts = Contacts.listContacts();
+```
+
+#### List Contact Folders
+
+The `listContactFolders` method is used to fetch contact folders from the Microsoft Graph API. It performs a GET request for the contact folders. The request requires an authorization header with the bearer token. If the request is successful, it logs the contact folders. If there's an error during the request, it logs an error message.
+
+```dart
+List<ContactFolder> contactFolders = Contacts.listContactFolders();
+```
+</details>
+
+
+## Contributors
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.github.com/PlaxXOnline"><img src="https://avatars.githubusercontent.com/u/62539586?v=4?s=100" width="100px;" alt="Janik Kahle"/><br /><sub><b>Janik Kahle</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=PlaxXOnline" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Noahbanderson"><img src="https://avatars.githubusercontent.com/u/52230969?v=4?s=100" width="100px;" alt="Noah Banderson"/><br /><sub><b>Noah Banderson</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=Noahbanderson" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+
