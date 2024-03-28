@@ -11,6 +11,7 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `meetingRooms`: An instance of the `MeetingRooms` class for operations related to meeting rooms.
 - `place`: An instance of the `Place` class for place-related operations.
 - `notes`: An instance of the `Notes` class for notes-related operations.
+- `contacts`: An instance of the `Contacts` class for contacts-related operations.
 
 ## Constructor
 The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place` and `Notes` classes.
@@ -333,4 +334,27 @@ The `createOneNoteNotebookForUser` method is devised to fabricate a new OneNote 
 Map<String, dynamic> userSpecificNotebook = await createOneNoteNotebookForUser(userIdOrPrincipal, "User's Private Notebook");
 ```
 
+</details>
+<details>
+  <summary>Contacts</summary>
+
+#### List Contacts
+
+The `listContacts` method is used to fetch contacts from the Microsoft Graph API. It performs a GET request for the contacts. The request requires an authorization header with the bearer token. If the request is successful, it logs the contacts. If there's an error during the request, it logs an error message.
+
+It takes an optional folderId parameter, which specifies the ID of the folder from which to fetch the contacts. If not provided, the contacts are fetched from the default contacts folder.
+
+It also takes an optional query parameter, which specifies the query string to filter the contacts. If not provided, all contacts are fetched.
+
+```dart
+List<Contact> contacts = Contacts.listContacts();
+```
+
+#### List Contact Folders
+
+The `listContactFolders` method is used to fetch contact folders from the Microsoft Graph API. It performs a GET request for the contact folders. The request requires an authorization header with the bearer token. If the request is successful, it logs the contact folders. If there's an error during the request, it logs an error message.
+
+```dart
+List<ContactFolder> contactFolders = Contacts.listContactFolders();
+```
 </details>
