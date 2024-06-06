@@ -15,9 +15,50 @@ class Contacts {
   ///
   /// Takes an optional parameter to specify the folderId instead of the default contacts folder.
   ///
-  /// See the [docs](https://learn.microsoft.com/en-us/graph/api/user-list-contacts?view=graph-rest-1.0&tabs=http)
-  /// for more information on how to use the query param
+  /// Iterating over pages of results is handled internally.
+  ///
+  /// You can specify the page size via the r'$top' query param. Microsoft's default page size is 10.
+  ///
+  /// To learn more about supported query params see [here](https://learn.microsoft.com/en-us/graph/query-parameters?tabs=http)
+  ///
+  /// [Endpoint Documentation](https://learn.microsoft.com/en-us/graph/api/user-list-contacts?view=graph-rest-1.0&tabs=http)
   Future<List<Contact>> listContacts({
+    final String? folderId,
+    final Map<String, dynamic>? query,
+    final int maxPages = 100,
+  }) async {
+    var hasMorePages = true;
+    final allContacts = <Contact>[];
+    var queryParams = query;
+    var page = 0;
+    while (hasMorePages) {
+      if (maxPages <= page) {
+        log('Max pages reached!!');
+        break;
+      }
+
+      final response = await _fetch(folderId: folderId, query: queryParams);
+
+      final contacts = _parseContacts(response);
+      allContacts.addAll(contacts);
+
+      final nextLink = response.data['@odata.nextLink'] as String?;
+      if (nextLink == null) {
+        hasMorePages = false;
+      } else {
+        queryParams = {
+          ...?query,
+          ...?Uri.tryParse(nextLink)?.queryParameters,
+        };
+      }
+
+      page++;
+    }
+
+    return allContacts;
+  }
+
+  Future<Response<dynamic>> _fetch({
     final String? folderId,
     final Map<String, dynamic>? query,
   }) async {
@@ -38,19 +79,23 @@ class Contacts {
         ),
       );
 
-      // Convert the response data to Contact objects
-      final contacts = (response.data['value'] as List<dynamic>)
-          .map((item) => Contact.fromJson(item))
-          .toList();
-
-      log('contacts: $contacts');
-
-      return contacts;
+      return response;
     } catch (e) {
       log('Failed to fetch contacts: $e');
 
       rethrow;
     }
+  }
+
+  _parseContacts(Response<dynamic> response) {
+    // Convert the response data to Contact objects
+    final contacts = (response.data['value'] as List<dynamic>)
+        .map((item) => Contact.fromJson(item))
+        .toList();
+
+    log('contacts: $contacts');
+
+    return contacts;
   }
 
   /// Does not include the default folder
