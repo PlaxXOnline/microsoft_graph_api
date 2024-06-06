@@ -344,10 +344,12 @@ The `listContacts` method is used to fetch contacts from the Microsoft Graph API
 
 It takes an optional folderId parameter, which specifies the ID of the folder from which to fetch the contacts. If not provided, the contacts are fetched from the default contacts folder.
 
+Paging is internally handled by the method.
+
 It also takes an optional query parameter, which specifies the query string to filter the contacts. If not provided, all contacts are fetched.
 
 ```dart
-List<Contact> contacts = Contacts.listContacts();
+List<Contact> contacts = await Contacts.listContacts();
 ```
 
 #### List Contact Folders
@@ -355,7 +357,7 @@ List<Contact> contacts = Contacts.listContacts();
 The `listContactFolders` method is used to fetch contact folders from the Microsoft Graph API. It performs a GET request for the contact folders. The request requires an authorization header with the bearer token. If the request is successful, it logs the contact folders. If there's an error during the request, it logs an error message.
 
 ```dart
-List<ContactFolder> contactFolders = Contacts.listContactFolders();
+List<ContactFolder> contactFolders = await Contacts.listContactFolders();
 ```
 </details>
 
@@ -366,7 +368,7 @@ List<ContactFolder> contactFolders = Contacts.listContactFolders();
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.github.com/PlaxXOnline"><img src="https://avatars.githubusercontent.com/u/62539586?v=4?s=100" width="100px;" alt="Janik Kahle"/><br /><sub><b>Janik Kahle</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=PlaxXOnline" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Noahbanderson"><img src="https://avatars.githubusercontent.com/u/52230969?v=4?s=100" width="100px;" alt="Noah Banderson"/><br /><sub><b>Noah Banderson</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=Noahbanderson" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Noahbanderson"><img src="https://avatars.githubusercontent.com/u/52230969?v=4?s=100" width="100px;" alt="Noah Anderson"/><br /><sub><b>Noah Anderson</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=Noahbanderson" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
