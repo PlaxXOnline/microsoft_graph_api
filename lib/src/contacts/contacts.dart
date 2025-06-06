@@ -33,7 +33,7 @@ class Contacts {
     var page = 0;
     while (hasMorePages) {
       if (maxPages <= page) {
-        log('Max pages reached!!');
+        log('Maximum page limit reached');
         break;
       }
 
