@@ -1,3 +1,10 @@
+## 0.0.8
+
+* added Mail API functionality (messages, mail folders, attachments)
+* implemented complete Mail functionality as per Microsoft Graph API documentation
+* fixed EmailAddress model to reuse existing model from calendar module
+* updated Readme and example with Mail functionality
+
 ## 0.0.7
 
 * added Permissions Table in Method Dart Doc

@@ -12,6 +12,7 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `place`: An instance of the `Place` class for place-related operations.
 - `notes`: An instance of the `Notes` class for notes-related operations.
 - `contacts`: An instance of the `Contacts` class for contacts-related operations.
+- `mail`: An instance of the `Mail` class for email-related operations.
 
 ## Constructor
 The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place` and `Notes` classes.
@@ -359,6 +360,111 @@ The `listContactFolders` method is used to fetch contact folders from the Micros
 ```dart
 List<ContactFolder> contactFolders = await Contacts.listContactFolders();
 ```
+</details>
+
+<details>
+  <summary>Mail</summary>
+
+#### Get Mail Folders
+
+The `getMailFolders` method fetches all mail folders from the Microsoft Graph API. It returns a list of `MailFolder` objects.
+
+```dart
+List<MailFolder> folders = await graphAPI.mail.getMailFolders();
+```
+
+#### Get Messages
+
+The `getMessages` method retrieves emails from a specified folder or from the inbox if no folder is specified. This method supports filtering and pagination.
+
+```dart
+// Get messages from inbox
+List<Message> messages = await graphAPI.mail.getMessages();
+
+// Get messages from a specific folder
+List<Message> messages = await graphAPI.mail.getMessages(folderId: 'folderIdHere');
+
+// Get filtered messages
+List<Message> messages = await graphAPI.mail.getMessages(filter: 'isRead eq false');
+```
+
+#### Send Email
+
+The `sendMail` method sends a new email message.
+
+```dart
+MessageCreateRequest newMessage = MessageCreateRequest(
+  subject: 'Test Subject',
+  body: ItemBody(
+    contentType: 'HTML',
+    content: '<p>This is a test email body.</p>',
+  ),
+  toRecipients: [
+    Recipient(
+      emailAddress: EmailAddress(
+        name: 'John Doe',
+        address: 'johndoe@example.com',
+      ),
+    ),
+  ],
+);
+
+bool success = await graphAPI.mail.sendMail(newMessage);
+```
+
+#### Create Draft
+
+The `createDraft` method creates a draft message that can be edited or sent later.
+
+```dart
+Message draft = await graphAPI.mail.createDraft(messageRequest);
+```
+
+#### Search Messages
+
+The `searchMessages` method allows searching for messages that match a query string.
+
+```dart
+List<Message> results = await graphAPI.mail.searchMessages('important meeting');
+```
+
+#### Working with Attachments
+
+Get attachments for a message:
+
+```dart
+List<Attachment> attachments = await graphAPI.mail.getAttachments(messageId);
+```
+
+Add an attachment to a message:
+
+```dart
+Attachment attachment = await graphAPI.mail.addAttachment(
+  messageId,
+  'file.txt',
+  base64Content,
+  'text/plain'
+);
+```
+
+#### Additional Operations
+
+The Mail API also provides methods for moving messages, setting flags, updating message properties, and more. Some examples:
+
+```dart
+// Mark a message as read/unread
+await graphAPI.mail.markAsRead(messageId, true);
+
+// Move a message to a different folder
+Message movedMessage = await graphAPI.mail.moveMessage(messageId, targetFolderId);
+
+// Set a flag on a message
+await graphAPI.mail.setFlag(messageId, 'flagged');
+
+// Delete a message
+bool deleted = await graphAPI.mail.deleteMessage(messageId);
+```
+
 </details>
 
 

@@ -83,4 +83,50 @@ class Example {
     List<Contact> contacts = await graphAPI.contacts.fetchContacts();
     List<ContactFolder> contactFolders = await graphAPI.contacts.fetchContactFolders();
   }
+  
+  /*-----------------------------Mail--------------------------------*/
+  _mail() async {
+    // Fetch mail folders
+    List<MailFolder> folders = await graphAPI.mail.getMailFolders();
+    
+    // Fetch messages from inbox
+    List<Message> messages = await graphAPI.mail.getMessages(top: 10);
+    
+    // Send a new email
+    MessageCreateRequest newMessage = MessageCreateRequest(
+      subject: 'Test Subject',
+      body: ItemBody(
+        contentType: 'HTML',
+        content: '<p>This is a test email body.</p>',
+      ),
+      toRecipients: [
+        Recipient(
+          emailAddress: EmailAddress(
+            name: 'John Doe',
+            address: 'johndoe@example.com',
+          ),
+        ),
+      ],
+      importance: 'normal',
+    );
+    
+    bool sent = await graphAPI.mail.sendMail(newMessage);
+    
+    // Create a draft message
+    Message draft = await graphAPI.mail.createDraft(newMessage);
+    
+    // Search for emails
+    List<Message> searchResults = await graphAPI.mail.searchMessages('important meeting');
+    
+    // Work with attachments (if we have a message with an ID)
+    if (messages.isNotEmpty && messages[0].id != null) {
+      String messageId = messages[0].id!;
+      
+      // Get attachments for a message
+      List<Attachment> attachments = await graphAPI.mail.getAttachments(messageId);
+      
+      // Mark a message as read
+      await graphAPI.mail.markAsRead(messageId, true);
+    }
+  }
 }
