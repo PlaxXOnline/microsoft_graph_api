@@ -18,7 +18,7 @@ jobs:
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v2.2
         with:
-          version: 3.10.4
+          version: 3.32.1
           channel: 'stable' # you can choose the Flutter channel you prefer: stable, beta, dev or master
       - uses: dart-lang/setup-dart@v1
       - name: Install dependencies
