@@ -14,9 +14,12 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `contacts`: An instance of the `Contacts` class for contacts-related operations.
 - `mail`: An instance of the `Mail` class for email-related operations.
 - `group`: An instance of the `GroupAPI` class for Microsoft 365 Groups operations.
+- `drive`: An instance of the `DriveAPI` class for OneDrive files and folders operations.
+- `planner`: An instance of the `PlannerAPI` class for Microsoft Planner operations.
+- `todo`: An instance of the `TodoAPI` class for Microsoft To Do operations.
 
 ## Constructor
-The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail` and `Group` classes.
+The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail`, `Group`, `Drive`, `Planner`, and `Todo` classes.
 
 ## Usage
 
@@ -34,6 +37,147 @@ List<Room> allPlaceRooms = graphAPI.place.fetchAllRooms();
 
 
 ## Features
+
+<details>
+  <summary>Todo</summary>
+
+### Task Lists
+
+#### Get All Task Lists
+
+The `getTaskLists` method retrieves all To Do task lists for the current user.
+
+```dart
+List<TodoTaskList> taskLists = await graphAPI.todo.getTaskLists();
+```
+
+#### Get Task List
+
+The `getTaskList` method retrieves a specific task list by its ID.
+
+```dart
+TodoTaskList taskList = await graphAPI.todo.getTaskList(taskListId);
+```
+
+#### Create Task List
+
+The `createTaskList` method creates a new task list.
+
+```dart
+TodoTaskListCreateRequest request = TodoTaskListCreateRequest(
+  displayName: 'My New Tasks',
+);
+TodoTaskList newTaskList = await graphAPI.todo.createTaskList(request);
+```
+
+#### Update Task List
+
+The `updateTaskList` method updates an existing task list.
+
+```dart
+TodoTaskListUpdateRequest request = TodoTaskListUpdateRequest(
+  displayName: 'Updated Task List Name',
+);
+TodoTaskList updatedTaskList = await graphAPI.todo.updateTaskList(taskListId, request);
+```
+
+#### Delete Task List
+
+The `deleteTaskList` method deletes a task list.
+
+```dart
+bool success = await graphAPI.todo.deleteTaskList(taskListId);
+```
+
+### Tasks
+
+#### Get All Tasks
+
+The `getTasks` method retrieves all tasks in a specific task list.
+
+```dart
+List<TodoTask> tasks = await graphAPI.todo.getTasks(taskListId);
+```
+
+#### Get Task
+
+The `getTask` method retrieves a specific task by its ID.
+
+```dart
+TodoTask task = await graphAPI.todo.getTask(taskListId, taskId);
+```
+
+#### Create Task
+
+The `createTask` method creates a new task in a task list.
+
+```dart
+TodoTaskCreateRequest request = TodoTaskCreateRequest(
+  title: 'Complete documentation',
+  dueDateTime: DateTime.now().add(Duration(days: 1)),
+);
+TodoTask newTask = await graphAPI.todo.createTask(taskListId, request);
+```
+
+#### Update Task
+
+The `updateTask` method updates an existing task.
+
+```dart
+TodoTaskUpdateRequest request = TodoTaskUpdateRequest(
+  title: 'Updated task title',
+  importance: 'high',
+);
+TodoTask updatedTask = await graphAPI.todo.updateTask(taskListId, taskId, request);
+```
+
+#### Delete Task
+
+The `deleteTask` method deletes a task.
+
+```dart
+bool success = await graphAPI.todo.deleteTask(taskListId, taskId);
+```
+
+#### Complete Task
+
+The `completeTask` method marks a task as completed.
+
+```dart
+TodoTask completedTask = await graphAPI.todo.completeTask(taskListId, taskId);
+```
+
+### Linked Resources
+
+#### Get Linked Resources
+
+The `getLinkedResources` method retrieves all linked resources for a task.
+
+```dart
+List<LinkedResource> resources = await graphAPI.todo.getLinkedResources(taskListId, taskId);
+```
+
+#### Create Linked Resource
+
+The `createLinkedResource` method creates a new linked resource for a task.
+
+```dart
+LinkedResourceCreateRequest request = LinkedResourceCreateRequest(
+  webUrl: 'https://example.com/resource',
+  applicationName: 'Browser',
+  displayName: 'Example Resource',
+);
+LinkedResource newResource = await graphAPI.todo.createLinkedResource(taskListId, taskId, request);
+```
+
+#### Delete Linked Resource
+
+The `deleteLinkedResource` method deletes a linked resource from a task.
+
+```dart
+bool success = await graphAPI.todo.deleteLinkedResource(taskListId, taskId, linkedResourceId);
+```
+</details>
 
 <details>
   <summary>Me</summary>
@@ -594,6 +738,313 @@ bool added = await graphAPI.group.addLifecyclePolicyToGroup(groupId, policyId);
 
 // Remove a policy from a group
 bool removed = await graphAPI.group.removeLifecyclePolicyFromGroup(groupId, policyId);
+```
+
+</details>
+
+<details>
+  <summary>OneDrive/Files</summary>
+
+#### Get Drives
+
+The `getDrives` method fetches all available drives for the authenticated user.
+
+```dart
+List<Drive> drives = await graphAPI.drive.getDrives();
+```
+
+#### Get Default Drive
+
+The `getDefaultDrive` method retrieves information about the authenticated user's default drive.
+
+```dart
+Drive drive = await graphAPI.drive.getDefaultDrive();
+```
+
+#### List Items in a Folder
+
+The `listItems` method retrieves files and folders within a specified folder.
+
+```dart
+// List items in the root folder of default drive
+List<DriveItem> items = await graphAPI.drive.listItems();
+
+// List items in a specific folder
+List<DriveItem> folderItems = await graphAPI.drive.listItems(folderId: 'folderId');
+
+// List items in a specific drive
+List<DriveItem> driveItems = await graphAPI.drive.listItems(driveId: 'driveId');
+```
+
+#### Get Item by ID or Path
+
+Retrieve a specific file or folder by its ID or path:
+
+```dart
+// Get by ID
+DriveItem item = await graphAPI.drive.getItem('itemId');
+
+// Get by path
+DriveItem documentItem = await graphAPI.drive.getItemByPath('/Documents/Report.docx');
+```
+
+#### Create a Folder
+
+The `createFolder` method creates a new folder in the specified location:
+
+```dart
+DriveItem newFolder = await graphAPI.drive.createFolder(
+  'Projects',
+  parentFolderId: 'folderId', // 'root' is default
+);
+```
+
+#### Upload Files
+
+Upload small files (less than 4MB):
+
+```dart
+DriveItem uploadedFile = await graphAPI.drive.uploadSmallFile(
+  'document.txt',
+  fileContent, // Uint8List of file content
+  contentType: 'text/plain'
+);
+```
+
+For larger files, create an upload session:
+
+```dart
+UploadSession session = await graphAPI.drive.createUploadSession(
+  'large-video.mp4',
+  parentFolderId: 'folderId'
+);
+
+// Use the uploadUrl property from the session to upload the file in chunks
+```
+
+#### Download Files
+
+The `downloadFile` method downloads a file's content:
+
+```dart
+Uint8List fileContent = await graphAPI.drive.downloadFile('fileId');
+```
+
+#### Move and Copy Items
+
+Move files and folders:
+
+```dart
+DriveItem movedItem = await graphAPI.drive.moveItem(
+  'itemId',
+  'newParentFolderId',
+  newName: 'newFileName.txt' // Optional rename during move
+);
+```
+
+Copy files and folders:
+
+```dart
+bool copyStarted = await graphAPI.drive.copyItem(
+  'itemId',
+  'destinationFolderId'
+);
+```
+
+#### Delete Items
+
+Delete files or folders:
+
+```dart
+bool deleted = await graphAPI.drive.deleteItem('itemId');
+```
+
+#### Search for Items
+
+Search for files and folders across a drive:
+
+```dart
+List<DriveItem> searchResults = await graphAPI.drive.searchItems('project proposal');
+```
+
+#### Get Thumbnails
+
+Retrieve thumbnails for image files:
+
+```dart
+ThumbnailSet thumbnails = await graphAPI.drive.getThumbnails('imageFileId');
+
+// Access specific sizes
+String smallThumbnailUrl = thumbnails.small.url;
+String mediumThumbnailUrl = thumbnails.medium.url;
+String largeThumbnailUrl = thumbnails.large.url;
+```
+
+</details>
+
+<details>
+  <summary>Planner</summary>
+
+#### Get Plans
+
+The `getPlans` method fetches all plans the authenticated user has access to.
+
+```dart
+List<Plan> plans = await graphAPI.planner.getPlans();
+```
+
+#### Get Group Plans
+
+The `getGroupPlans` method fetches all plans for a specific Microsoft 365 Group.
+
+```dart
+List<Plan> groupPlans = await graphAPI.planner.getGroupPlans('groupId');
+```
+
+#### Get Plan Details
+
+Retrieve details about a specific plan:
+
+```dart
+Plan plan = await graphAPI.planner.getPlan('planId');
+PlanDetails details = await graphAPI.planner.getPlanDetails('planId');
+```
+
+#### Create a Plan
+
+Create a new plan in a Microsoft 365 Group:
+
+```dart
+PlanCreateRequest request = PlanCreateRequest(
+  title: 'Q4 Project Plan',
+  owner: 'groupId' // ID of the Microsoft 365 Group
+);
+
+Plan newPlan = await graphAPI.planner.createPlan(request);
+```
+
+#### Update a Plan
+
+Update an existing plan (requires ETag for concurrency control):
+
+```dart
+PlanUpdateRequest updateRequest = PlanUpdateRequest(
+  title: 'Updated Plan Title'
+);
+
+Plan updatedPlan = await graphAPI.planner.updatePlan(
+  'planId',
+  updateRequest,
+  'plan-etag-value'
+);
+```
+
+#### Tasks in a Plan
+
+Get all tasks in a plan:
+
+```dart
+List<PlannerTask> tasks = await graphAPI.planner.getPlanTasks('planId');
+```
+
+Get a specific task and its details:
+
+```dart
+PlannerTask task = await graphAPI.planner.getTask('taskId');
+PlannerTaskDetails taskDetails = await graphAPI.planner.getTaskDetails('taskId');
+```
+
+#### Create a Task
+
+Create a new task in a plan:
+
+```dart
+TaskCreateRequest taskRequest = TaskCreateRequest(
+  title: 'Complete API integration',
+  planId: 'planId',
+  bucketId: 'bucketId', // The bucket/column the task belongs to
+  dueDateTime: '2023-12-15T17:00:00Z',
+  priority: 5 // 0-10, higher means higher priority
+);
+
+PlannerTask newTask = await graphAPI.planner.createTask(taskRequest);
+```
+
+#### Update a Task
+
+Update a task (requires ETag for concurrency control):
+
+```dart
+TaskUpdateRequest updateRequest = TaskUpdateRequest(
+  title: 'Updated task title',
+  percentComplete: 50,
+  priority: 8
+);
+
+PlannerTask updatedTask = await graphAPI.planner.updateTask(
+  'taskId',
+  updateRequest,
+  'task-etag-value'
+);
+```
+
+#### Assign a Task
+
+Assign a task to a user:
+
+```dart
+bool assigned = await graphAPI.planner.assignTask(
+  'taskId',
+  'userId',
+  'task-etag-value'
+);
+```
+
+#### Delete a Task
+
+Delete a task:
+
+```dart
+bool deleted = await graphAPI.planner.deleteTask('taskId', 'task-etag-value');
+```
+
+#### Buckets (Columns)
+
+Get all buckets in a plan:
+
+```dart
+List<PlannerBucket> buckets = await graphAPI.planner.getPlanBuckets('planId');
+```
+
+Create a new bucket:
+
+```dart
+BucketCreateRequest bucketRequest = BucketCreateRequest(
+  name: 'In Progress',
+  planId: 'planId'
+);
+
+PlannerBucket newBucket = await graphAPI.planner.createBucket(bucketRequest);
+```
+
+Update a bucket:
+
+```dart
+BucketUpdateRequest updateRequest = BucketUpdateRequest(
+  name: 'Updated Bucket Name'
+);
+
+PlannerBucket updatedBucket = await graphAPI.planner.updateBucket(
+  'bucketId',
+  updateRequest,
+  'bucket-etag-value'
+);
+```
+
+Delete a bucket:
+
+```dart
+bool deleted = await graphAPI.planner.deleteBucket('bucketId', 'bucket-etag-value');
 ```
 
 </details>

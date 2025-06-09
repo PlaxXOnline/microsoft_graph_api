@@ -1,3 +1,25 @@
+## 0.0.12
+
+* added Microsoft To Do API functionality for task management
+* implemented TodoAPI class with comprehensive task list and task operations
+* added Todo model classes with proper JSON serialization
+* implemented linked resources functionality for tasks
+* improved error handling with consistent exception patterns
+
+## 0.0.11
+
+* added Microsoft Planner API functionality for task management
+* implemented PlannerAPI class with comprehensive plan, task, and bucket operations
+* added Planner model classes with proper JSON serialization
+* updated README with Planner API documentation
+
+## 0.0.10
+
+* added OneDrive/Files API functionality for file management in Microsoft Graph
+* implemented DriveAPI class with comprehensive file and folder operations
+* added Drive model classes with proper JSON serialization
+* updated README with OneDrive/Files API documentation
+
 ## 0.0.9
 
 * added Group API functionality for Microsoft 365 Groups
