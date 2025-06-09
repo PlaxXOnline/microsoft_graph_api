@@ -1,3 +1,10 @@
+## 0.0.10
+
+* added OneDrive/Files API functionality for file management in Microsoft Graph
+* implemented DriveAPI class with comprehensive file and folder operations
+* added Drive model classes with proper JSON serialization
+* updated README with OneDrive/Files API documentation
+
 ## 0.0.9
 
 * added Group API functionality for Microsoft 365 Groups

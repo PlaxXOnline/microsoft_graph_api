@@ -14,9 +14,10 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `contacts`: An instance of the `Contacts` class for contacts-related operations.
 - `mail`: An instance of the `Mail` class for email-related operations.
 - `group`: An instance of the `GroupAPI` class for Microsoft 365 Groups operations.
+- `drive`: An instance of the `DriveAPI` class for OneDrive files and folders operations.
 
 ## Constructor
-The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail` and `Group` classes.
+The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail`, `Group`, and `Drive` classes.
 
 ## Usage
 
@@ -599,6 +600,146 @@ bool added = await graphAPI.group.addLifecyclePolicyToGroup(groupId, policyId);
 
 // Remove a policy from a group
 bool removed = await graphAPI.group.removeLifecyclePolicyFromGroup(groupId, policyId);
+```
+
+</details>
+
+<details>
+  <summary>OneDrive/Files</summary>
+
+#### Get Drives
+
+The `getDrives` method fetches all available drives for the authenticated user.
+
+```dart
+List<Drive> drives = await graphAPI.drive.getDrives();
+```
+
+#### Get Default Drive
+
+The `getDefaultDrive` method retrieves information about the authenticated user's default drive.
+
+```dart
+Drive drive = await graphAPI.drive.getDefaultDrive();
+```
+
+#### List Items in a Folder
+
+The `listItems` method retrieves files and folders within a specified folder.
+
+```dart
+// List items in the root folder of default drive
+List<DriveItem> items = await graphAPI.drive.listItems();
+
+// List items in a specific folder
+List<DriveItem> folderItems = await graphAPI.drive.listItems(folderId: 'folderId');
+
+// List items in a specific drive
+List<DriveItem> driveItems = await graphAPI.drive.listItems(driveId: 'driveId');
+```
+
+#### Get Item by ID or Path
+
+Retrieve a specific file or folder by its ID or path:
+
+```dart
+// Get by ID
+DriveItem item = await graphAPI.drive.getItem('itemId');
+
+// Get by path
+DriveItem documentItem = await graphAPI.drive.getItemByPath('/Documents/Report.docx');
+```
+
+#### Create a Folder
+
+The `createFolder` method creates a new folder in the specified location:
+
+```dart
+DriveItem newFolder = await graphAPI.drive.createFolder(
+  'Projects',
+  parentFolderId: 'folderId', // 'root' is default
+);
+```
+
+#### Upload Files
+
+Upload small files (less than 4MB):
+
+```dart
+DriveItem uploadedFile = await graphAPI.drive.uploadSmallFile(
+  'document.txt',
+  fileContent, // Uint8List of file content
+  contentType: 'text/plain'
+);
+```
+
+For larger files, create an upload session:
+
+```dart
+UploadSession session = await graphAPI.drive.createUploadSession(
+  'large-video.mp4',
+  parentFolderId: 'folderId'
+);
+
+// Use the uploadUrl property from the session to upload the file in chunks
+```
+
+#### Download Files
+
+The `downloadFile` method downloads a file's content:
+
+```dart
+Uint8List fileContent = await graphAPI.drive.downloadFile('fileId');
+```
+
+#### Move and Copy Items
+
+Move files and folders:
+
+```dart
+DriveItem movedItem = await graphAPI.drive.moveItem(
+  'itemId',
+  'newParentFolderId',
+  newName: 'newFileName.txt' // Optional rename during move
+);
+```
+
+Copy files and folders:
+
+```dart
+bool copyStarted = await graphAPI.drive.copyItem(
+  'itemId',
+  'destinationFolderId'
+);
+```
+
+#### Delete Items
+
+Delete files or folders:
+
+```dart
+bool deleted = await graphAPI.drive.deleteItem('itemId');
+```
+
+#### Search for Items
+
+Search for files and folders across a drive:
+
+```dart
+List<DriveItem> searchResults = await graphAPI.drive.searchItems('project proposal');
+```
+
+#### Get Thumbnails
+
+Retrieve thumbnails for image files:
+
+```dart
+ThumbnailSet thumbnails = await graphAPI.drive.getThumbnails('imageFileId');
+
+// Access specific sizes
+String smallThumbnailUrl = thumbnails.small.url;
+String mediumThumbnailUrl = thumbnails.medium.url;
+String largeThumbnailUrl = thumbnails.large.url;
 ```
 
 </details>
