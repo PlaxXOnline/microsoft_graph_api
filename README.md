@@ -13,9 +13,10 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `notes`: An instance of the `Notes` class for notes-related operations.
 - `contacts`: An instance of the `Contacts` class for contacts-related operations.
 - `mail`: An instance of the `Mail` class for email-related operations.
+- `group`: An instance of the `GroupAPI` class for Microsoft 365 Groups operations.
 
 ## Constructor
-The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place` and `Notes` classes.
+The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail` and `Group` classes.
 
 ## Usage
 
@@ -463,6 +464,136 @@ await graphAPI.mail.setFlag(messageId, 'flagged');
 
 // Delete a message
 bool deleted = await graphAPI.mail.deleteMessage(messageId);
+```
+
+</details>
+
+<details>
+  <summary>Groups</summary>
+
+#### Get All Groups
+
+The `getGroups` method fetches all Microsoft 365 groups the authenticated user is a member of.
+
+```dart
+List<Group> groups = await graphAPI.group.getGroups();
+```
+
+#### Get Specific Group
+
+The `getGroup` method retrieves a specific group by its ID.
+
+```dart
+Group group = await graphAPI.group.getGroup(groupId);
+```
+
+#### Create Group
+
+The `createGroup` method creates a new Microsoft 365 group.
+
+```dart
+GroupCreateRequest request = GroupCreateRequest(
+  displayName: 'Marketing Team',
+  mailNickname: 'marketing',
+  description: 'Group for marketing team collaboration',
+  mailEnabled: true,
+  securityEnabled: false,
+  groupTypes: ['Unified']
+);
+
+Group newGroup = await graphAPI.group.createGroup(request);
+```
+
+#### Update and Delete Groups
+
+The Group API provides methods for updating and deleting groups:
+
+```dart
+// Update a group's properties
+bool updated = await graphAPI.group.updateGroup(groupId, {
+  'description': 'Updated description for the marketing team'
+});
+
+// Delete a group
+bool deleted = await graphAPI.group.deleteGroup(groupId);
+```
+
+#### Group Members Management
+
+Manage members of a group with these methods:
+
+```dart
+// Get all members of a group
+List<GroupMember> members = await graphAPI.group.getGroupMembers(groupId);
+
+// Add a member to a group
+bool added = await graphAPI.group.addGroupMember(groupId, userId);
+
+// Remove a member from a group
+bool removed = await graphAPI.group.removeGroupMember(groupId, userId);
+```
+
+#### Group Conversations and Posts
+
+Work with group conversations, threads, and posts:
+
+```dart
+// Get conversations in a group
+List<GroupConversation> conversations = await graphAPI.group.getGroupConversations(groupId);
+
+// Create a new conversation
+ConversationCreateRequest convRequest = ConversationCreateRequest(
+  topic: 'Project Discussion',
+  message: '<p>Let\'s discuss the new project timeline.</p>'
+);
+
+GroupConversation newConversation = await graphAPI.group.createGroupConversation(
+  groupId, 
+  convRequest
+);
+
+// Get threads in a conversation
+List<ConversationThread> threads = await graphAPI.group.getConversationThreads(
+  groupId, 
+  conversationId
+);
+
+// Get posts in a thread
+List<Post> posts = await graphAPI.group.getThreadPosts(
+  groupId, 
+  conversationId, 
+  threadId
+);
+
+// Create a post in a thread
+PostCreateRequest postRequest = PostCreateRequest(
+  body: ItemBody(
+    contentType: 'HTML',
+    content: '<p>I agree with the proposed timeline.</p>'
+  )
+);
+
+Post newPost = await graphAPI.group.createPost(
+  groupId, 
+  conversationId, 
+  threadId, 
+  postRequest
+);
+```
+
+#### Group Lifecycle Policies
+
+Manage group lifecycle policies with these methods:
+
+```dart
+// Get all lifecycle policies
+List<GroupLifecyclePolicy> policies = await graphAPI.group.getGroupLifecyclePolicies();
+
+// Add a policy to a group
+bool added = await graphAPI.group.addLifecyclePolicyToGroup(groupId, policyId);
+
+// Remove a policy from a group
+bool removed = await graphAPI.group.removeLifecyclePolicyFromGroup(groupId, policyId);
 ```
 
 </details>
