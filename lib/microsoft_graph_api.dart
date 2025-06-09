@@ -10,6 +10,7 @@ import 'package:microsoft_graph_api/src/mail/mail.dart';
 import 'package:microsoft_graph_api/src/group/group.dart';
 import 'package:microsoft_graph_api/src/drive/drive.dart';
 import 'package:microsoft_graph_api/src/planner/planner.dart';
+import 'package:microsoft_graph_api/src/todo/todo.dart';
 
 /// Class for interacting with the Microsoft Graph API.
 /// This class serves as the central access point to the various
@@ -48,6 +49,9 @@ class MSGraphAPI {
   /// Provides access to operations on Microsoft Planner.
   late final PlannerAPI planner;
 
+  /// Provides access to operations on Microsoft To Do.
+  late final TodoAPI todo;
+
   /// Creates a new instance of the MSGraphAPI class.
   /// Accepts an authentication token and initializes access to the various
   /// areas of the Microsoft Graph API.
@@ -62,5 +66,6 @@ class MSGraphAPI {
     group = GroupAPI(_token);
     drive = DriveAPI(_token);
     planner = PlannerAPI(_token);
+    todo = TodoAPI(_token);
   }
 }

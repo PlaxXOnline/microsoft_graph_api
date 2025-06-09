@@ -16,9 +16,10 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `group`: An instance of the `GroupAPI` class for Microsoft 365 Groups operations.
 - `drive`: An instance of the `DriveAPI` class for OneDrive files and folders operations.
 - `planner`: An instance of the `PlannerAPI` class for Microsoft Planner operations.
+- `todo`: An instance of the `TodoAPI` class for Microsoft To Do operations.
 
 ## Constructor
-The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail`, `Group`, `Drive`, and `Planner` classes.
+The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail`, `Group`, `Drive`, `Planner`, and `Todo` classes.
 
 ## Usage
 
@@ -36,6 +37,147 @@ List<Room> allPlaceRooms = graphAPI.place.fetchAllRooms();
 
 
 ## Features
+
+<details>
+  <summary>Todo</summary>
+
+### Task Lists
+
+#### Get All Task Lists
+
+The `getTaskLists` method retrieves all To Do task lists for the current user.
+
+```dart
+List<TodoTaskList> taskLists = await graphAPI.todo.getTaskLists();
+```
+
+#### Get Task List
+
+The `getTaskList` method retrieves a specific task list by its ID.
+
+```dart
+TodoTaskList taskList = await graphAPI.todo.getTaskList(taskListId);
+```
+
+#### Create Task List
+
+The `createTaskList` method creates a new task list.
+
+```dart
+TodoTaskListCreateRequest request = TodoTaskListCreateRequest(
+  displayName: 'My New Tasks',
+);
+TodoTaskList newTaskList = await graphAPI.todo.createTaskList(request);
+```
+
+#### Update Task List
+
+The `updateTaskList` method updates an existing task list.
+
+```dart
+TodoTaskListUpdateRequest request = TodoTaskListUpdateRequest(
+  displayName: 'Updated Task List Name',
+);
+TodoTaskList updatedTaskList = await graphAPI.todo.updateTaskList(taskListId, request);
+```
+
+#### Delete Task List
+
+The `deleteTaskList` method deletes a task list.
+
+```dart
+bool success = await graphAPI.todo.deleteTaskList(taskListId);
+```
+
+### Tasks
+
+#### Get All Tasks
+
+The `getTasks` method retrieves all tasks in a specific task list.
+
+```dart
+List<TodoTask> tasks = await graphAPI.todo.getTasks(taskListId);
+```
+
+#### Get Task
+
+The `getTask` method retrieves a specific task by its ID.
+
+```dart
+TodoTask task = await graphAPI.todo.getTask(taskListId, taskId);
+```
+
+#### Create Task
+
+The `createTask` method creates a new task in a task list.
+
+```dart
+TodoTaskCreateRequest request = TodoTaskCreateRequest(
+  title: 'Complete documentation',
+  dueDateTime: DateTime.now().add(Duration(days: 1)),
+);
+TodoTask newTask = await graphAPI.todo.createTask(taskListId, request);
+```
+
+#### Update Task
+
+The `updateTask` method updates an existing task.
+
+```dart
+TodoTaskUpdateRequest request = TodoTaskUpdateRequest(
+  title: 'Updated task title',
+  importance: 'high',
+);
+TodoTask updatedTask = await graphAPI.todo.updateTask(taskListId, taskId, request);
+```
+
+#### Delete Task
+
+The `deleteTask` method deletes a task.
+
+```dart
+bool success = await graphAPI.todo.deleteTask(taskListId, taskId);
+```
+
+#### Complete Task
+
+The `completeTask` method marks a task as completed.
+
+```dart
+TodoTask completedTask = await graphAPI.todo.completeTask(taskListId, taskId);
+```
+
+### Linked Resources
+
+#### Get Linked Resources
+
+The `getLinkedResources` method retrieves all linked resources for a task.
+
+```dart
+List<LinkedResource> resources = await graphAPI.todo.getLinkedResources(taskListId, taskId);
+```
+
+#### Create Linked Resource
+
+The `createLinkedResource` method creates a new linked resource for a task.
+
+```dart
+LinkedResourceCreateRequest request = LinkedResourceCreateRequest(
+  webUrl: 'https://example.com/resource',
+  applicationName: 'Browser',
+  displayName: 'Example Resource',
+);
+LinkedResource newResource = await graphAPI.todo.createLinkedResource(taskListId, taskId, request);
+```
+
+#### Delete Linked Resource
+
+The `deleteLinkedResource` method deletes a linked resource from a task.
+
+```dart
+bool success = await graphAPI.todo.deleteLinkedResource(taskListId, taskId, linkedResourceId);
+```
+</details>
 
 <details>
   <summary>Me</summary>

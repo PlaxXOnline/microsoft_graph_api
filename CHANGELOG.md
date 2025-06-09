@@ -1,3 +1,11 @@
+## 0.0.12
+
+* added Microsoft To Do API functionality for task management
+* implemented TodoAPI class with comprehensive task list and task operations
+* added Todo model classes with proper JSON serialization
+* implemented linked resources functionality for tasks
+* improved error handling with consistent exception patterns
+
 ## 0.0.11
 
 * added Microsoft Planner API functionality for task management
