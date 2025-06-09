@@ -9,11 +9,12 @@ import 'package:microsoft_graph_api/src/contacts/contacts.dart';
 import 'package:microsoft_graph_api/src/mail/mail.dart';
 import 'package:microsoft_graph_api/src/group/group.dart';
 import 'package:microsoft_graph_api/src/drive/drive.dart';
+import 'package:microsoft_graph_api/src/planner/planner.dart';
 
 /// Class for interacting with the Microsoft Graph API.
 /// This class serves as the central access point to the various
 /// areas of the Microsoft Graph API, including users, calendar,
-/// meeting rooms, places, mail, contacts, groups, and files/OneDrive.
+/// meeting rooms, places, mail, contacts, groups, files/OneDrive, and planner.
 class MSGraphAPI {
   final String _token;
 
@@ -39,10 +40,13 @@ class MSGraphAPI {
   late Mail mail;
 
   /// Provides access to operations on Microsoft 365 groups.
-  late GroupAPI group;
+  late final GroupAPI group;
 
   /// Provides access to operations on OneDrive files and folders.
-  late DriveAPI drive;
+  late final DriveAPI drive;
+
+  /// Provides access to operations on Microsoft Planner.
+  late final PlannerAPI planner;
 
   /// Creates a new instance of the MSGraphAPI class.
   /// Accepts an authentication token and initializes access to the various
@@ -57,5 +61,6 @@ class MSGraphAPI {
     mail = Mail(_token);
     group = GroupAPI(_token);
     drive = DriveAPI(_token);
+    planner = PlannerAPI(_token);
   }
 }

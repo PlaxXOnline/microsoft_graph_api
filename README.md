@@ -15,9 +15,10 @@ The `MSGraphAPI` class serves as a primary point of interaction for working with
 - `mail`: An instance of the `Mail` class for email-related operations.
 - `group`: An instance of the `GroupAPI` class for Microsoft 365 Groups operations.
 - `drive`: An instance of the `DriveAPI` class for OneDrive files and folders operations.
+- `planner`: An instance of the `PlannerAPI` class for Microsoft Planner operations.
 
 ## Constructor
-The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail`, `Group`, and `Drive` classes.
+The constructor takes a string parameter, `_token`, which represents the authentication token for accessing Microsoft Graph API. It initializes instances of `Me`, `Users`, `Calendar`, `MeetingRooms`, `Place`, `Notes`, `Contacts`, `Mail`, `Group`, `Drive`, and `Planner` classes.
 
 ## Usage
 
@@ -735,6 +736,173 @@ ThumbnailSet thumbnails = await graphAPI.drive.getThumbnails('imageFileId');
 String smallThumbnailUrl = thumbnails.small.url;
 String mediumThumbnailUrl = thumbnails.medium.url;
 String largeThumbnailUrl = thumbnails.large.url;
+```
+
+</details>
+
+<details>
+  <summary>Planner</summary>
+
+#### Get Plans
+
+The `getPlans` method fetches all plans the authenticated user has access to.
+
+```dart
+List<Plan> plans = await graphAPI.planner.getPlans();
+```
+
+#### Get Group Plans
+
+The `getGroupPlans` method fetches all plans for a specific Microsoft 365 Group.
+
+```dart
+List<Plan> groupPlans = await graphAPI.planner.getGroupPlans('groupId');
+```
+
+#### Get Plan Details
+
+Retrieve details about a specific plan:
+
+```dart
+Plan plan = await graphAPI.planner.getPlan('planId');
+PlanDetails details = await graphAPI.planner.getPlanDetails('planId');
+```
+
+#### Create a Plan
+
+Create a new plan in a Microsoft 365 Group:
+
+```dart
+PlanCreateRequest request = PlanCreateRequest(
+  title: 'Q4 Project Plan',
+  owner: 'groupId' // ID of the Microsoft 365 Group
+);
+
+Plan newPlan = await graphAPI.planner.createPlan(request);
+```
+
+#### Update a Plan
+
+Update an existing plan (requires ETag for concurrency control):
+
+```dart
+PlanUpdateRequest updateRequest = PlanUpdateRequest(
+  title: 'Updated Plan Title'
+);
+
+Plan updatedPlan = await graphAPI.planner.updatePlan(
+  'planId',
+  updateRequest,
+  'plan-etag-value'
+);
+```
+
+#### Tasks in a Plan
+
+Get all tasks in a plan:
+
+```dart
+List<PlannerTask> tasks = await graphAPI.planner.getPlanTasks('planId');
+```
+
+Get a specific task and its details:
+
+```dart
+PlannerTask task = await graphAPI.planner.getTask('taskId');
+PlannerTaskDetails taskDetails = await graphAPI.planner.getTaskDetails('taskId');
+```
+
+#### Create a Task
+
+Create a new task in a plan:
+
+```dart
+TaskCreateRequest taskRequest = TaskCreateRequest(
+  title: 'Complete API integration',
+  planId: 'planId',
+  bucketId: 'bucketId', // The bucket/column the task belongs to
+  dueDateTime: '2023-12-15T17:00:00Z',
+  priority: 5 // 0-10, higher means higher priority
+);
+
+PlannerTask newTask = await graphAPI.planner.createTask(taskRequest);
+```
+
+#### Update a Task
+
+Update a task (requires ETag for concurrency control):
+
+```dart
+TaskUpdateRequest updateRequest = TaskUpdateRequest(
+  title: 'Updated task title',
+  percentComplete: 50,
+  priority: 8
+);
+
+PlannerTask updatedTask = await graphAPI.planner.updateTask(
+  'taskId',
+  updateRequest,
+  'task-etag-value'
+);
+```
+
+#### Assign a Task
+
+Assign a task to a user:
+
+```dart
+bool assigned = await graphAPI.planner.assignTask(
+  'taskId',
+  'userId',
+  'task-etag-value'
+);
+```
+
+#### Delete a Task
+
+Delete a task:
+
+```dart
+bool deleted = await graphAPI.planner.deleteTask('taskId', 'task-etag-value');
+```
+
+#### Buckets (Columns)
+
+Get all buckets in a plan:
+
+```dart
+List<PlannerBucket> buckets = await graphAPI.planner.getPlanBuckets('planId');
+```
+
+Create a new bucket:
+
+```dart
+BucketCreateRequest bucketRequest = BucketCreateRequest(
+  name: 'In Progress',
+  planId: 'planId'
+);
+
+PlannerBucket newBucket = await graphAPI.planner.createBucket(bucketRequest);
+```
+
+Update a bucket:
+
+```dart
+BucketUpdateRequest updateRequest = BucketUpdateRequest(
+  name: 'Updated Bucket Name'
+);
+
+PlannerBucket updatedBucket = await graphAPI.planner.updateBucket(
+  'bucketId',
+  updateRequest,
+  'bucket-etag-value'
+);
+```
+
+Delete a bucket:
+
+```dart
+bool deleted = await graphAPI.planner.deleteBucket('bucketId', 'bucket-etag-value');
 ```
 
 </details>

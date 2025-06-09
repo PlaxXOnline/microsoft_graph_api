@@ -1,3 +1,10 @@
+## 0.0.11
+
+* added Microsoft Planner API functionality for task management
+* implemented PlannerAPI class with comprehensive plan, task, and bucket operations
+* added Planner model classes with proper JSON serialization
+* updated README with Planner API documentation
+
 ## 0.0.10
 
 * added OneDrive/Files API functionality for file management in Microsoft Graph
