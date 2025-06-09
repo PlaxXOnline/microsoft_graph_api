@@ -545,12 +545,7 @@ List<GroupConversation> conversations = await graphAPI.group.getGroupConversatio
 // Create a new conversation
 ConversationCreateRequest convRequest = ConversationCreateRequest(
   topic: 'Project Discussion',
-  message: PostCreateRequest(
-    body: ItemBody(
-      contentType: 'HTML',
-      content: '<p>Let's discuss the new project timeline.</p>'
-    )
-  )
+  message: '<p>Let\'s discuss the new project timeline.</p>'
 );
 
 GroupConversation newConversation = await graphAPI.group.createGroupConversation(
