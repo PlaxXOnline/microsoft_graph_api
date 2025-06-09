@@ -1,3 +1,10 @@
+## 0.0.9
+
+* added Group API functionality for Microsoft 365 Groups
+* refactored Mail models from a single file into separate files with proper JSON serialization
+* improved code organization and maintainability
+* updated README with comprehensive Group API documentation
+
 ## 0.0.8
 
 * added Mail API functionality (messages, mail folders, attachments)
