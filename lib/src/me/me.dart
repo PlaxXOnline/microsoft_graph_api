@@ -1,12 +1,17 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:microsoft_graph_api/models/models.dart';
 
 class Me {
   final String _token;
   Me(this._token);
+
+  /// Represents a Base64 Encoded version of assets/user-shadow.png
+  static const defaultAvatar64 =
+      'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAAORAAADkQFnq8zdAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAASxQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAEAAAEAAAEAAADAAADAAADAAADAAADAAADAAADAAACAAACAAACAAACAgACAgACAgACAgACAgACAgACAgACAgACAgACAgACAgACAgACAgACAgACAQABAQABAQABAQABAQABAQABAQABAQADAQADAQADAQADAQADAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQACAQAChQl4dgAAAGN0Uk5TAAMHCAkKDQ4QEhQXGRwdHh8gIiMnKCsvMDE0NTY5PD1AQUJITU5TVVdZYmx3eXqCh4iKi4yPkpOWmp+kqa+1t7i5ur/BxMXHy8/S09bY2drf4+fo7O3u7/Hy8/T19vf4+f3+CD+Y6wAAAepJREFUGBm1wYda2lAABtAfwRYsQxyIMyiOVsEJ2jqpI4qKC5HWVoj53/8dGsRSkeTeS/L1HOD/CgwMBOCSL5U/f6Dl4Tyf8qFboY0K36hshNANf6bKd6oZP5RFirRRjEDRxB1t3U1AyWSNDmqTUBAt01E5CqneIgWKvZBZodAKJD79otDvMMS+UuIbhD7UKWF8hMhnSn2ByC6ldiHyg1I/IRCkgiCcDVPBMJylqCAFZ2kqSMPZOBWMw1mcCuJw5jcoZfghcESpI4gsU2oZIglKJSB0QIkDiE1TYhoS+xTah0z4ngL3YUjNU2AeCjJ0lIGSrElbZhaKZiu0UZmFgp7cpg+IHbPDcQzwbeZ6IJS8IA+DANKnbHOaBhA8JC+ScObLGrRcjcCi5Up8VcppsIxc0WJkfXAwqLPpeTuChpi2sLS0oMXQENl+ZpM+CFtzj2x5WhtCm6G1J7Y8zsHGVI1tSutaH170aesltqlNoUOiyk71G12/qbNTNYF3orfsym0UbUKX7NJlCG8EdHZND+CfPF3IoyVu0AUjjr926MoOXiVNumIm0VSgSwW8mKFrM2g4o2tnsIzRgzEAq/RgFcA1PbgGEvQkgUV6sogterKFE3pygjI9KWOPnuxh9LtJ18zCKID+pGv98O4Px/GXRNnaln0AAAAASUVORK5CYII=';
 
   final Dio _dio = Dio();
 
@@ -97,12 +102,12 @@ class Me {
   /// size that is not supported, the API returns the next larger image.
   ///
   /// If the request is successful (HTTP status code 200), the image data is
-  /// returned as a `MemoryImage`. If the request fails for any reason, an
+  /// returned as a `Uint8List`. If the request fails for any reason, an
   /// exception is thrown. If the image data cannot be retrieved, a default
-  /// image asset is returned.
+  /// image asset is returned as a Uint8List.
   ///
   /// Returns:
-  ///   A `Future` that completes with an `ImageProvider` representing the
+  ///   A `Future` that completes with an `Uint8List` representing the
   ///   user's profile image or a default image.
   ///
   /// Throws:
@@ -113,7 +118,7 @@ class Me {
   /// | Delegated (work or school account)         | User.Read                   | User.ReadBasic.All, User.Read.All, User.ReadWrite, User.ReadWrite.All |
   /// | Delegated (personal Microsoft account)     | User.Read                   | User.ReadWrite                                                        |
   /// | Application                                | User.Read.All               | User.ReadWrite.All                                                    |
-  Future<ImageProvider> fetchUserProfileImage(String size) async {
+  Future<Uint8List> fetchUserProfileImage(String size) async {
     try {
       final response = await _dio.get(
         'https://graph.microsoft.com/v1.0/me/photos/$size/\$value',
@@ -126,7 +131,7 @@ class Me {
       );
 
       if (response.statusCode == 200) {
-        return MemoryImage(response.data);
+        return Uint8List.fromList(response.data);
       } else {
         throw Exception('Failed to load image');
       }
@@ -135,7 +140,8 @@ class Me {
       if (e is DioException && e.response != null) {
         log('Server response: ${e.response?.data}');
       }
-      return const AssetImage('assets/user-shadow.png');
+      var encoded = base64Decode(defaultAvatar64);
+      return Uint8List.fromList(encoded);
     }
   }
 
