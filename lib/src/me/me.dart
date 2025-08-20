@@ -140,8 +140,8 @@ class Me {
       if (e is DioException && e.response != null) {
         log('Server response: ${e.response?.data}');
       }
-      var encoded = base64Decode(defaultAvatar64);
-      return Uint8List.fromList(encoded);
+      var decoded = base64Decode(defaultAvatar64);
+      return Uint8List.fromList(decoded);
     }
   }
 

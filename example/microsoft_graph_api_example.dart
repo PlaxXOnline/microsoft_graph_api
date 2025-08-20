@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:microsoft_graph_api/microsoft_graph_api.dart';
 import 'package:microsoft_graph_api/models/models.dart';
 
@@ -10,7 +9,7 @@ class Example {
     User user = await graphAPI.me.fetchUserInfo();
     bool result =
         await graphAPI.me.changePassword('BadPassword', 'AlsoBadPassword');
-    ImageProvider image = await graphAPI.me
+    Uint8List imageBytes = await graphAPI.me
         .fetchUserProfileImage(PhotoSize().getPicSize(PhotoSizeEnum.size48x48));
 
     List<Map<String, dynamic>> meNotebooks =
