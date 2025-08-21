@@ -1,3 +1,8 @@
+## 0.0.13
+
+* decoupled library from Flutter allowing its use in pure Dart applications
+* `fetchUserProfileImage` method now returns a `Uint8List` rather than an `ImageProvider`
+
 ## 0.0.12
 
 * added Microsoft To Do API functionality for task management
