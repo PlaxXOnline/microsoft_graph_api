@@ -200,10 +200,10 @@ bool isChanged = await graphAPI.me.changePassword(currentPassword, newPassword);
 
 #### Fetch User Profile Image
 
-The `fetchUserProfileImage` method is used to fetch the user's profile image from the Microsoft Graph API. The method sends a GET request and requires a `size` parameter, which specifies the desired size of the image. It returns a `Future<ImageProvider> object representing the user's profile image.
+The `fetchUserProfileImage` method is used to fetch the user's profile image from the Microsoft Graph API. The method sends a GET request and requires a `size` parameter, which specifies the desired size of the image. It returns a `Future<Uint8List>` object representing the user's profile image as bytes. If calling from Flutter, you can wrap the image in an `ImageProvider` such as `MemoryImage`.
 
 ```dart
-ImageProvider image = await graphAPI.me.fetchUserProfileImage(size);
+Uint8List image = await graphAPI.me.fetchUserProfileImage(size);
 ```
 
 

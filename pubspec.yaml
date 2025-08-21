@@ -1,6 +1,6 @@
 name: microsoft_graph_api
-description: Flutter package for seamless Microsoft 365 data access via Microsoft Graph API.
-version: 0.0.12
+description: Dart package for seamless Microsoft 365 data access via Microsoft Graph API.
+version: 0.0.13
 repository: https://github.com/PlaxXOnline/microsoft_graph_api
 issue_tracker: https://github.com/PlaxXOnline/microsoft_graph_api/issues
 
@@ -14,11 +14,8 @@ platforms:
 
 environment:
   sdk: '>=3.0.3 <4.0.0'
-  flutter: ">=1.17.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   equatable: ^2.0.5
   dio: ^5.2.1+1
   mockito: ^5.4.2
@@ -26,12 +23,6 @@ dependencies:
 
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
   build_runner: ^2.4.5
   json_serializable: ^6.7.1
-
-flutter:
-  assets:
-    - assets/user-shadow.png
+  lints: ^6.0.0
