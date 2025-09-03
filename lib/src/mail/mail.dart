@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:microsoft_graph_api/models/mail/mail_models.dart';
 
@@ -14,15 +15,17 @@ class Mail {
   /// This method sends a GET request to the Microsoft Graph API to retrieve all mail folders.
   /// It returns a list of [MailFolder] objects representing the mail folders.
   ///
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
+  ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Read, Mail.ReadWrite                                |
   /// | Delegated (personal Microsoft account)     | Mail.Read, Mail.ReadWrite                                |
   /// | Application                                | Mail.Read, Mail.ReadWrite                                |
-  Future<List<MailFolder>> getMailFolders() async {
+  Future<List<MailFolder>> getMailFolders({String userIdOrPrincipal = ''}) async {
     try {
       final response = await _dio.get(
-        'https://graph.microsoft.com/v1.0/me/mailFolders',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/mailFolders',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -46,16 +49,17 @@ class Mail {
   /// Gets a specific mail folder by its ID.
   ///
   /// [folderId] is the ID of the mail folder to retrieve.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Read, Mail.ReadWrite                                |
   /// | Delegated (personal Microsoft account)     | Mail.Read, Mail.ReadWrite                                |
   /// | Application                                | Mail.Read, Mail.ReadWrite                                |
-  Future<MailFolder> getMailFolder(String folderId) async {
+  Future<MailFolder> getMailFolder(String folderId, {String userIdOrPrincipal = ''}) async {
     try {
       final response = await _dio.get(
-        'https://graph.microsoft.com/v1.0/me/mailFolders/$folderId',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/mailFolders/$folderId',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -74,13 +78,18 @@ class Mail {
   ///
   /// [displayName] is the display name of the new folder.
   /// [parentFolderId] is the ID of the parent folder. If null, the folder is created at the root level.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.ReadWrite                                           |
   /// | Delegated (personal Microsoft account)     | Mail.ReadWrite                                           |
   /// | Application                                | Mail.ReadWrite                                           |
-  Future<MailFolder> createMailFolder(String displayName, {String? parentFolderId}) async {
+  Future<MailFolder> createMailFolder(
+    String displayName, {
+    String? parentFolderId,
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       final Map<String, dynamic> data = {
         'displayName': displayName,
@@ -91,7 +100,7 @@ class Mail {
       }
 
       final response = await _dio.post(
-        'https://graph.microsoft.com/v1.0/me/mailFolders',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/mailFolders',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -113,19 +122,26 @@ class Mail {
   /// [folderId] is the ID of the folder to get messages from. If null, messages are retrieved from the inbox.
   /// [filter] is an optional OData filter expression.
   /// [top] is the maximum number of messages to retrieve.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Read, Mail.ReadWrite                                |
   /// | Delegated (personal Microsoft account)     | Mail.Read, Mail.ReadWrite                                |
   /// | Application                                | Mail.Read, Mail.ReadWrite                                |
-  Future<List<Message>> getMessages({String? folderId, String? filter, int top = 25}) async {
+  Future<List<Message>> getMessages({
+    String? folderId,
+    String? filter,
+    int top = 25,
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       String url;
       if (folderId != null) {
-        url = 'https://graph.microsoft.com/v1.0/me/mailFolders/$folderId/messages';
+        url =
+            'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/mailFolders/$folderId/messages';
       } else {
-        url = 'https://graph.microsoft.com/v1.0/me/messages';
+        url = 'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages';
       }
 
       // Build query parameters
@@ -160,16 +176,20 @@ class Mail {
   /// Gets a specific message by its ID.
   ///
   /// [messageId] is the ID of the message to retrieve.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Read, Mail.ReadWrite                                |
   /// | Delegated (personal Microsoft account)     | Mail.Read, Mail.ReadWrite                                |
   /// | Application                                | Mail.Read, Mail.ReadWrite                                |
-  Future<Message> getMessage(String messageId) async {
+  Future<Message> getMessage(
+    String messageId, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       final response = await _dio.get(
-        'https://graph.microsoft.com/v1.0/me/messages/$messageId',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages/$messageId',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -187,16 +207,20 @@ class Mail {
   /// Creates a draft message.
   ///
   /// [request] is a [MessageCreateRequest] containing the message properties.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.ReadWrite                                           |
   /// | Delegated (personal Microsoft account)     | Mail.ReadWrite                                           |
   /// | Application                                | Mail.ReadWrite                                           |
-  Future<Message> createDraft(MessageCreateRequest request) async {
+  Future<Message> createDraft(
+    MessageCreateRequest request, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       final response = await _dio.post(
-        'https://graph.microsoft.com/v1.0/me/messages',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -216,13 +240,17 @@ class Mail {
   /// Sends a new message.
   ///
   /// [request] is a [MessageCreateRequest] containing the message properties.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Send                                                |
   /// | Delegated (personal Microsoft account)     | Mail.Send                                                |
   /// | Application                                | Mail.Send                                                |
-  Future<bool> sendMail(MessageCreateRequest request) async {
+  Future<bool> sendMail(
+    MessageCreateRequest request, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       final data = {
         'message': request.toJson(),
@@ -230,7 +258,7 @@ class Mail {
       };
 
       await _dio.post(
-        'https://graph.microsoft.com/v1.0/me/sendMail',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/sendMail',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -250,16 +278,20 @@ class Mail {
   /// Sends an existing draft message.
   ///
   /// [messageId] is the ID of the draft message to send.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Send                                                |
   /// | Delegated (personal Microsoft account)     | Mail.Send                                                |
   /// | Application                                | Mail.Send                                                |
-  Future<bool> sendDraft(String messageId) async {
+  Future<bool> sendDraft(
+    String messageId, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       await _dio.post(
-        'https://graph.microsoft.com/v1.0/me/messages/$messageId/send',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages/$messageId/send',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -279,16 +311,21 @@ class Mail {
   ///
   /// [messageId] is the ID of the message to update.
   /// [properties] is a map containing the properties to update.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.ReadWrite                                           |
   /// | Delegated (personal Microsoft account)     | Mail.ReadWrite                                           |
   /// | Application                                | Mail.ReadWrite                                           |
-  Future<bool> updateMessage(String messageId, Map<String, dynamic> properties) async {
+  Future<bool> updateMessage(
+    String messageId,
+    Map<String, dynamic> properties, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       await _dio.patch(
-        'https://graph.microsoft.com/v1.0/me/messages/$messageId',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages/$messageId',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -309,30 +346,40 @@ class Mail {
   ///
   /// [messageId] is the ID of the message to update.
   /// [isRead] is true to mark the message as read, false to mark it as unread.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.ReadWrite                                           |
   /// | Delegated (personal Microsoft account)     | Mail.ReadWrite                                           |
   /// | Application                                | Mail.ReadWrite                                           |
-  Future<bool> markAsRead(String messageId, bool isRead) async {
-    return updateMessage(messageId, {'isRead': isRead});
+  Future<bool> markAsRead(
+    String messageId,
+    bool isRead, {
+    String userIdOrPrincipal = '',
+  }) async {
+    return updateMessage(messageId, {'isRead': isRead}, userIdOrPrincipal: userIdOrPrincipal);
   }
 
   /// Moves a message to a different folder.
   ///
   /// [messageId] is the ID of the message to move.
   /// [destinationFolderId] is the ID of the destination folder.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.ReadWrite                                           |
   /// | Delegated (personal Microsoft account)     | Mail.ReadWrite                                           |
   /// | Application                                | Mail.ReadWrite                                           |
-  Future<Message> moveMessage(String messageId, String destinationFolderId) async {
+  Future<Message> moveMessage(
+    String messageId,
+    String destinationFolderId, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       final response = await _dio.post(
-        'https://graph.microsoft.com/v1.0/me/messages/$messageId/move',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages/$messageId/move',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -354,16 +401,20 @@ class Mail {
   /// Deletes a message.
   ///
   /// [messageId] is the ID of the message to delete.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.ReadWrite                                           |
   /// | Delegated (personal Microsoft account)     | Mail.ReadWrite                                           |
   /// | Application                                | Mail.ReadWrite                                           |
-  Future<bool> deleteMessage(String messageId) async {
+  Future<bool> deleteMessage(
+    String messageId, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       await _dio.delete(
-        'https://graph.microsoft.com/v1.0/me/messages/$messageId',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages/$messageId',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -381,16 +432,20 @@ class Mail {
   /// Gets the attachments of a message.
   ///
   /// [messageId] is the ID of the message.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Read, Mail.ReadWrite                                |
   /// | Delegated (personal Microsoft account)     | Mail.Read, Mail.ReadWrite                                |
   /// | Application                                | Mail.Read, Mail.ReadWrite                                |
-  Future<List<Attachment>> getAttachments(String messageId) async {
+  Future<List<Attachment>> getAttachments(
+    String messageId, {
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       final response = await _dio.get(
-        'https://graph.microsoft.com/v1.0/me/messages/$messageId/attachments',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages/$messageId/attachments',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -417,6 +472,7 @@ class Mail {
   /// [name] is the name of the attachment.
   /// [contentBytes] is the base64-encoded content of the attachment.
   /// [contentType] is the MIME type of the attachment.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
@@ -430,6 +486,7 @@ class Mail {
     String contentType, {
     bool isInline = false,
     String? contentId,
+    String userIdOrPrincipal = '',
   }) async {
     try {
       final Map<String, dynamic> data = {
@@ -445,7 +502,7 @@ class Mail {
       }
 
       final response = await _dio.post(
-        'https://graph.microsoft.com/v1.0/me/messages/$messageId/attachments',
+        'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages/$messageId/attachments',
         options: Options(
           headers: {
             'Authorization': 'Bearer $_token',
@@ -468,13 +525,20 @@ class Mail {
   /// [flagStatus] is the flag status: 'notFlagged', 'flagged', or 'complete'.
   /// [startDateTime] is the start date for the follow-up.
   /// [dueDateTime] is the due date for the follow-up.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.ReadWrite                                           |
   /// | Delegated (personal Microsoft account)     | Mail.ReadWrite                                           |
   /// | Application                                | Mail.ReadWrite                                           |
-  Future<bool> setFlag(String messageId, String flagStatus, {DateTime? startDateTime, DateTime? dueDateTime}) async {
+  Future<bool> setFlag(
+    String messageId,
+    String flagStatus, {
+    DateTime? startDateTime,
+    DateTime? dueDateTime,
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       final Map<String, dynamic> flag = {
         'flagStatus': flagStatus,
@@ -494,7 +558,7 @@ class Mail {
         };
       }
 
-      return updateMessage(messageId, {'flag': flag});
+      return updateMessage(messageId, {'flag': flag, userIdOrPrincipal: userIdOrPrincipal});
     } catch (e) {
       log('Error setting flag: $e');
       return false;
@@ -505,19 +569,26 @@ class Mail {
   ///
   /// [query] is the search query.
   /// [folderId] is the ID of the folder to search in. If null, all folders are searched.
+  /// [userIdOrPrincipal] optional username or ID to fetch mailboxes for. Defaults to current user if not specified.
   ///
   /// | Permission type                             | Permissions (from least to most privileged)              |
   /// |--------------------------------------------|----------------------------------------------------------|
   /// | Delegated (work or school account)         | Mail.Read, Mail.ReadWrite                                |
   /// | Delegated (personal Microsoft account)     | Mail.Read, Mail.ReadWrite                                |
   /// | Application                                | Mail.Read, Mail.ReadWrite                                |
-  Future<List<Message>> searchMessages(String query, {String? folderId, int top = 25}) async {
+  Future<List<Message>> searchMessages(
+    String query, {
+    String? folderId,
+    int top = 25,
+    String userIdOrPrincipal = '',
+  }) async {
     try {
       String url;
       if (folderId != null) {
-        url = 'https://graph.microsoft.com/v1.0/me/mailFolders/$folderId/messages';
+        url =
+            'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/mailFolders/$folderId/messages';
       } else {
-        url = 'https://graph.microsoft.com/v1.0/me/messages';
+        url = 'https://graph.microsoft.com/v1.0/${_meOrPrincipalUser(userIdOrPrincipal)}/messages';
       }
 
       final response = await _dio.get(
@@ -546,4 +617,6 @@ class Mail {
       return [];
     }
   }
+
+  String _meOrPrincipalUser(String userIdOrPrincipal) => userIdOrPrincipal.isEmpty ? 'me' : 'users/$userIdOrPrincipal';
 }

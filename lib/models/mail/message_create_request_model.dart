@@ -25,7 +25,9 @@ class MessageCreateRequest {
   /// The BCC recipient list for the message.
   final List<Recipient>? bccRecipients;
 
-  /// Whether to save the message in the Sent Items folder.
+  /// Whether to save the message in the Sent Items folder. Exclude from JSON
+  /// generation as we use this field directly.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool? saveToSentItems;
 
   MessageCreateRequest({

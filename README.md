@@ -510,12 +510,22 @@ List<ContactFolder> contactFolders = await Contacts.listContactFolders();
 <details>
   <summary>Mail</summary>
 
+#### Overview
+
+By default, the mail methods run against the user authorised by the token. Each of the
+mail methods can take an optional username/id to specify which user to run the actions as. 
+
 #### Get Mail Folders
 
 The `getMailFolders` method fetches all mail folders from the Microsoft Graph API. It returns a list of `MailFolder` objects.
 
 ```dart
 List<MailFolder> folders = await graphAPI.mail.getMailFolders();
+```
+or to fetch the folders for a specific user:
+
+```dart
+List<MailFolder> folders = await graphAPI.mail.getMailFolders(userIdOrPrincipal: 'someuser@outlook.com');
 ```
 
 #### Get Messages
@@ -525,6 +535,9 @@ The `getMessages` method retrieves emails from a specified folder or from the in
 ```dart
 // Get messages from inbox
 List<Message> messages = await graphAPI.mail.getMessages();
+
+// Get messages from inbox for a specific user (with appropriate permissions)
+List<Message> messages = await graphAPI.mail.getMessages(userIdOrPrincipal: 'someuser@outlook.com');
 
 // Get messages from a specific folder
 List<Message> messages = await graphAPI.mail.getMessages(folderId: 'folderIdHere');
@@ -1057,8 +1070,7 @@ bool deleted = await graphAPI.planner.deleteBucket('bucketId', 'bucket-etag-valu
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.github.com/PlaxXOnline"><img src="https://avatars.githubusercontent.com/u/62539586?v=4?s=100" width="100px;" alt="Janik Kahle"/><br /><sub><b>Janik Kahle</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=PlaxXOnline" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Noahbanderson"><img src="https://avatars.githubusercontent.com/u/52230969?v=4?s=100" width="100px;" alt="Noah Anderson"/><br /><sub><b>Noah Anderson</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=Noahbanderson" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amugofjava"><img src="https://avatars.githubusercontent.com/u/5526902?v=4" width="100px;" alt="Ben Hills"/><br /><sub><b>Ben Hills</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=amugofjava" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
-
-
