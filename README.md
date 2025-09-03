@@ -510,12 +510,22 @@ List<ContactFolder> contactFolders = await Contacts.listContactFolders();
 <details>
   <summary>Mail</summary>
 
+#### Overview
+
+By default, the mail methods run against the user authorised by the token. Each of the
+mail methods can take an optional username/id to specify which user to run the actions as. 
+
 #### Get Mail Folders
 
 The `getMailFolders` method fetches all mail folders from the Microsoft Graph API. It returns a list of `MailFolder` objects.
 
 ```dart
 List<MailFolder> folders = await graphAPI.mail.getMailFolders();
+```
+or to fetch the folders for a specific user:
+
+```dart
+List<MailFolder> folders = await graphAPI.mail.getMailFolders(userIdOrPrincipal: 'someuser@outlook.com');
 ```
 
 #### Get Messages
@@ -525,6 +535,9 @@ The `getMessages` method retrieves emails from a specified folder or from the in
 ```dart
 // Get messages from inbox
 List<Message> messages = await graphAPI.mail.getMessages();
+
+// Get messages from inbox for a specific user (with appropriate permissions)
+List<Message> messages = await graphAPI.mail.getMessages(userIdOrPrincipal: 'someuser@outlook.com');
 
 // Get messages from a specific folder
 List<Message> messages = await graphAPI.mail.getMessages(folderId: 'folderIdHere');

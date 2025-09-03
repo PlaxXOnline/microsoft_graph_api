@@ -21,7 +21,6 @@ MessageCreateRequest _$MessageCreateRequestFromJson(
       bccRecipients: (json['bccRecipients'] as List<dynamic>?)
           ?.map((e) => Recipient.fromJson(e as Map<String, dynamic>))
           .toList(),
-      saveToSentItems: json['saveToSentItems'] as bool?,
     );
 
 Map<String, dynamic> _$MessageCreateRequestToJson(
@@ -33,5 +32,4 @@ Map<String, dynamic> _$MessageCreateRequestToJson(
       'toRecipients': instance.toRecipients,
       'ccRecipients': instance.ccRecipients,
       'bccRecipients': instance.bccRecipients,
-      'saveToSentItems': instance.saveToSentItems,
     };
