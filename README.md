@@ -1070,8 +1070,7 @@ bool deleted = await graphAPI.planner.deleteBucket('bucketId', 'bucket-etag-valu
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.github.com/PlaxXOnline"><img src="https://avatars.githubusercontent.com/u/62539586?v=4?s=100" width="100px;" alt="Janik Kahle"/><br /><sub><b>Janik Kahle</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=PlaxXOnline" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Noahbanderson"><img src="https://avatars.githubusercontent.com/u/52230969?v=4?s=100" width="100px;" alt="Noah Anderson"/><br /><sub><b>Noah Anderson</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=Noahbanderson" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amugofjava"><img src="https://avatars.githubusercontent.com/u/5526902?v=4" width="100px;" alt="Ben Hills"/><br /><sub><b>Ben Hills</b></sub></a><br /><a href="https://github.com/PlaxXOnline/microsoft_graph_api/commits?author=amugofjava" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
-
-
