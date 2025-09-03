@@ -1,3 +1,8 @@
+## 0.0.14
+
+* mail functions can now take an optional username or user id to perform the action on behalf of.
+* fixed bug in create request model which inadvertently included an invalid value to the JSON data.
+
 ## 0.0.13
 
 * decoupled library from Flutter allowing its use in pure Dart applications
